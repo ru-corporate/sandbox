@@ -7,7 +7,7 @@
 сделать представление результатов. Все шаги должны быть связаны 
 между собой без ручных операций. 
 
-## Что желательно изучить 
+## Что необходимо изучить 
 
 - Базовая работа с github
 - [Структурирование проекта в области анализа данных (ds cookiecutter)](https://github.com/ru-corporate/sandbox/issues/2)
@@ -17,7 +17,7 @@
    - https://github.com/ru-corporate/data-rosstat-boo-light
    - https://github.com/ru-corporate/data-rosstat-boo-2013
 
-## Что дальше
+## Что сделать 
 
-Делаем в этом репо [минимальный пример кода, который решает поставленную выше задачу](https://github.com/ru-corporate/sandbox/issues/1).
+В этом репо мы делаем [минимальный пример кода, который решает поставленную выше задачу](https://github.com/ru-corporate/sandbox/issues/1).
 
