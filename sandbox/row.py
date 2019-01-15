@@ -1,8 +1,11 @@
 from collections import OrderedDict
 from numpy import int64 
 
-from . import columns 
-
+try: 
+   from . import columns 
+except ImportError:
+   import columns 
+    
 
 INT_TYPE = int64
 EMPTY = int('0')
@@ -51,42 +54,45 @@ def get_unit_adjuster(unit_name: str):
         raise ValueError("Unit not supported: %s" % unit_name)
     
 
-def parse(rowd: OrderedDict, datacols = columns.DATACOLS):
-    """Return modified *rowd* as list."""
+def as_ordered_dict(row):
+    return OrderedDict(columns.COLUMNS, row)
+   
+
+def make_text(rowd: OrderedDict):
     # assemble new text columns
     ok1, ok2, ok3 = okved3(rowd['okved'])
     org, title = dequote(rowd['name'])
     region = rowd['inn'][0:2]        
-    # text    
-    text = [ok1, ok2, ok3,
+    return [ok1, ok2, ok3,
             org, title, region, rowd['inn'],
             rowd['okpo'], rowd['okopf'], rowd['okfs'],
             rowd['unit']]
-    # adjust values to '000 rub 
-    func = get_unit_adjuster(unit_name=rowd['unit'])
-    data = [func(rowd[k]) for k in datacols]
-    return text + data
 
-
-def colnames(datacols = columns.DATACOLS):
-    """Return colnames corresponding to parse_row()."""
+def make_text_columns():
     return ['ok1', 'ok2', 'ok3',
             'org', 'title', 'region', 'inn',
             'okpo', 'okopf', 'okfs',
-            'unit'] + datacols
-
-COLUMNS_SELECTED = colnames()
-
-def make_dict(row):
-    return OrderedDict(zip(COLUMNS_SELECTED, row))
-
-def dtypes(columns = COLUMNS_SELECTED):
+            'unit']
+    
+# may change
+def dtypes(lookup_dict):
     """Return types correspoding to get_colnames().
-       Used to speed up CSV import in custom_df_reader(). """
-    dtype_dict = {k: INT_TYPE for k in columns}
-    for key in ['date', 'org', 'title', 'region', 'inn', 
-                'okpo', 'okopf', 'okfs']:
-         dtype_dict[key] = str
+       Used to speed up CSV import. """
+    dtype_dict = {k: INT_TYPE for k in columns.new_colnames(lookup_dict)}
+    for key in ['org', 'title', 'region', 'inn',
+                'okpo', 'okopf', 'okfs',
+                'unit']:
+        dtype_dict[key] = str
     return dtype_dict
 
-DTYPES_SELECTED = dtypes()
+def make_data(rowd: OrderedDict, data_columns):
+    # adjust values to '000 rub 
+    func = get_unit_adjuster(unit_name=rowd['unit'])
+    return [func(rowd[k]) for k in data_columns]
+
+def make_row_parser(lookup_dict):
+    names = columns.new_colnames(lookup_dict)
+    data_columns = columns.data_columns(lookup_dict) 
+    def parse(row):
+        rowd = OrderedDict(names, names)
+        return make_text(rowd) + make_data(rowd, data_columns)

@@ -40,8 +40,8 @@ def download(year: int, force=False):
     echo = util.messenger.create(year)
     if os.path.exists(p) and not force:
         echo("Already downloaded", 
-             "\n    URL was", u, 
-             "\n    Local path is", p)
+             "\n           URL:", u, 
+             "\n    Local path:", p)
     else:
         echo("Downloading from", u)
         curl(u, p)

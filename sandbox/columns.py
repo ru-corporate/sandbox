@@ -44,96 +44,54 @@ TTL_COLUMNS = ['Наименование', 'ОКПО', 'ОКОПФ', 'ОКФС',
             '63223', '63233', '63243', '63253', '63263', '63303', '63503', 
             '63003', '64003', 'Дата актуализации'] 
 
-
-fst = lambda code: code[0]
-last = lambda code: code[-1]
-trim = lambda code: code[0:-1]
-
-
-def lags(code):
-    d = dict(postfix="", prefix="")
-    # section 3 code not changed
-    if fst(code) == "3":
-        d['prefix'] = code
-    else:  
-        fin = last(code)
-        if fin == "3" or fin == "4":
-            d['prefix'] = trim(code)
-            if fin =="4":
-                d['postfix'] = "_lag"
-        else:
-            d['prefix'] = code            
-    return d
-
-
-def renamer(mapping):
-    keys = list(mapping.keys())
-    def foo(code):
-        c = code['prefix']
-        if c in keys:
-            code['prefix'] = mapping[c]
-        return code    
-    return foo        
-    
-
-def combine(code):
-    return code['prefix'] + code['postfix']
-
-
-RENAMER_START_TEXT = {'Наименование': 'name',
+RENAME_TEXT = {'Наименование': 'name',
               'ОКПО': 'okpo',
               'ОКОПФ': 'okopf',
               'ОКФС': 'okfs',
               'ОКВЭД': 'okved',
               'ИНН': 'inn',
               'Код единицы измерения': 'unit',
-              'Тип отчета': 'report_type'}
+              'Тип отчета': 'report_type', 
+              'Дата актуализации': 'date_published'}
 
-RENAMER_LAST_TEXT = {'Дата актуализации': 'date'}
+def rename_in_list(xs, d):
+    keys = d.keys()
+    return [(d[x] if (x in keys) else x) for x in xs]
 
-RENAMER_1 = OrderedDict([
-                ('1150', 'of'),
-                ('1100', 'ta_fix'),
-                ('1200', 'ta_nonfix'),
-                ('1600', 'ta'),
-                ('1300', 'tp_capital'),
-                ('1400', 'tp_long'),
-                ('1410', 'debt_long'),
-                ('1500', 'tp_short'),
-                ('1510', 'debt_short'),
-                ('1700', 'tp'),
-                ('2110', 'sales'),
-                ('2200', 'profit_oper'),
-                ('2330', 'exp_interest'),
-                ('2300', 'profit_before_tax')])
-    
-RENAMER_2 = OrderedDict([                 
-                ('4100', 'cf_oper'),
-                ('4200', 'cf_inv'),
-                ('4300', 'cf_fin'),   
-                ('4400', 'cf'),                 
-                ('4110', 'cash_in_oper_total'),
-                ('4111', 'cash_in_oper_sales'),
-                ('4121', 'paid_to_supplier'),
-                ('4122', 'paid_to_worker'),
-                ('4123', 'paid_interest'),
-                ('4124', 'paid_profit_tax'),
-                ('4129', 'paid_other_costs'),
-                ('4221', 'paid_fa_investment')])
+COLUMNS = rename_in_list(TTL_COLUMNS, RENAME_TEXT)
 
-def plus(*args):
-    d = {}
-    for a in args:
-        d.update(a)
+fst  = lambda code: code[0]
+last = lambda code: code[-1]
+trim = lambda code: code[0:-1]
+
+def to_dicts(code):
+    d = dict(postfix="", prefix=code)
+    lc = last(code)
+    # section 3 code not changed
+    if fst(code) != "3" and lc in ["3", "4"]:
+        d['prefix'] = trim(code)
+        if lc == "4": 
+            d['postfix'] = "_lag"
     return d
 
-rename = renamer(plus(RENAMER_1, RENAMER_2, RENAMER_START_TEXT, RENAMER_LAST_TEXT))
-COLUMNS = [combine(rename(lags(c))) for c in TTL_COLUMNS]
+def renamer(lookup_dict):
+    def foo(code):
+        c = code['prefix']        
+        code['prefix'] = lookup_dict.get(c, c)
+        return code    
+    return foo        
+    
+def combine(code):
+    return code['prefix'] + code['postfix']
 
-def make_dict0(row):
-        return OrderedDict(zip(COLUMNS, row))
+def colname_dicts(lookup_dict):
+    r = renamer(lookup_dict)     
+    return [r(to_dicts(c)) for c in COLUMNS]
 
-def lagged(renamer):
-    return OrderedDict([(k+"_lag", v+"_lag") for k, v in renamer.items()])
+def data_columns(lookup_dict):
+    varnames = lookup_dict.values()
+    colnames = colname_dicts(lookup_dict)
+    return [combine(c) for c in colnames if (cd['prefix'] in varnames)]
 
-DATACOLS = list(plus(RENAMER_1, lagged(RENAMER_1), RENAMER_2).values()) 
+def new_names(lookup_dict):
+    return [combine(c) for c in colname_dicts(lookup_dict)]
