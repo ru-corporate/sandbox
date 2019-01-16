@@ -1,14 +1,10 @@
 """Download CSV file from Rosstat web site."""
 
 import requests
-import os
-from .util import files 
-from .util import messenger
 
-
-def is_provided(year):
-    if year not in list(range(2012, 2017+1)):
-        raise ValueError(year)     
+from boo.util import files
+from boo.util import  messenger
+from boo import settings
 
 
 def url(year):
@@ -16,7 +12,7 @@ def url(year):
     Construct filenames similar to
     http://www.gks.ru/opendata/storage/7708234640-bdboo2012/data-20181029t000000-structure-20121231t000000.csv
     """
-    is_provided(year)
+    settings.is_valid(year)
     return ('http://www.gks.ru/opendata/storage/' +
             '7708234640-bdboo{}/'.format(year) +
             'data-20181029t000000-structure-{}1231t000000.csv'.format(year)
@@ -34,18 +30,14 @@ def curl(url: str, path: str):
                 f.write(chunk)
 
 
-def download(year: int, force=False):    
+def download(year: int):    
+    p = files.raw_path(year)
+    files.does_not_exist(p)
     u = url(year) 
-    p = util.files.raw(year)
-    echo = util.messenger.create(year)
-    if os.path.exists(p) and not force:
-        echo("Already downloaded", 
-             "\n           URL:", u, 
-             "\n    Local path:", p)
-    else:
-        echo("Downloading from", u)
-        curl(u, p)
-        echo("Saved at", p)
+    echo = messenger.create(year)
+    echo("Downloading from", u)
+    curl(u, p)
+    echo("Saved at", p)
 
 
 if __name__ == "__main__":

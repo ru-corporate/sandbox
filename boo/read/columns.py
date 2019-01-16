@@ -1,7 +1,4 @@
 """Create column names."""
-# http://info.avtovaz.ru/files/avtovaz_ras_12m_2013.pdf 
-
-from collections import OrderedDict
 
 # Provided at Rosstat web site
 TTL_COLUMNS = ['Наименование', 'ОКПО', 'ОКОПФ', 'ОКФС', 'ОКВЭД', 'ИНН', 
@@ -54,44 +51,46 @@ RENAME_TEXT = {'Наименование': 'name',
               'Тип отчета': 'report_type', 
               'Дата актуализации': 'date_published'}
 
-def rename_in_list(xs, d):
-    keys = d.keys()
-    return [(d[x] if (x in keys) else x) for x in xs]
-
-COLUMNS = rename_in_list(TTL_COLUMNS, RENAME_TEXT)
-
 fst  = lambda code: code[0]
 last = lambda code: code[-1]
 trim = lambda code: code[0:-1]
 
-def to_dicts(code):
-    d = dict(postfix="", prefix=code)
-    lc = last(code)
-    # section 3 code not changed
-    if fst(code) != "3" and lc in ["3", "4"]:
-        d['prefix'] = trim(code)
-        if lc == "4": 
-            d['postfix'] = "_lag"
-    return d
-
-def renamer(lookup_dict):
-    def foo(code):
-        c = code['prefix']        
-        code['prefix'] = lookup_dict.get(c, c)
-        return code    
-    return foo        
+class Colname:
+    def __init__(self, text):
+        self.prefix = text
+        self.postfix = ""
+        if fst(text) != "3" and last(text) in ["3", "4"]:
+            self.prefix = trim(text)
+            if last(text) == "4": 
+                self.postfix = "_lag"
+                
+    def change_by(self, lookup_dict):
+         try:
+             self.prefix = lookup_dict[self.prefix]
+         except KeyError:
+             pass
+         return self
+     
+    def isin(self, lookup_dict):
+        return self.prefix in list(lookup_dict.values())        
     
-def combine(code):
-    return code['prefix'] + code['postfix']
+    def __repr__(self):
+        return self.__str__()
+    
+    def __str__(self):
+        return self.prefix + self.postfix
+        
+COLUMNS = [Colname(x).change_by(RENAME_TEXT) for x in TTL_COLUMNS]
 
-def colname_dicts(lookup_dict):
-    r = renamer(lookup_dict)     
-    return [r(to_dicts(c)) for c in COLUMNS]
+def change(lookup_dict, f=lambda x: x, columns=COLUMNS):
+    return [f(x.change_by(lookup_dict)) for x in columns]
 
-def data_columns(lookup_dict):
-    varnames = lookup_dict.values()
-    colnames = colname_dicts(lookup_dict)
-    return [combine(c) for c in colnames if (cd['prefix'] in varnames)]
+def long_colnames(lookup_dict):
+    return change(lookup_dict, str)
 
-def new_names(lookup_dict):
-    return [combine(c) for c in colname_dicts(lookup_dict)]
+def data_colnames(lookup_dict):
+    return [str(x) for x in change(lookup_dict) if x.isin(lookup_dict)]
+
+if __name__ == '__main__':
+    print(long_colnames({'1110':'of'}))    
+    print(data_colnames({'1110':'of'}))    

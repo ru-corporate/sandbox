@@ -1,0 +1,1 @@
+from boo.boo import Corporate

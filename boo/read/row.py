@@ -1,13 +1,11 @@
 from collections import OrderedDict
-from numpy import int64 
 
 try: 
    from . import columns 
 except ImportError:
-   import columns 
-    
+   import columns
 
-INT_TYPE = int64
+
 EMPTY = int('0')
 QUOTE_CHAR = '"'
 
@@ -16,11 +14,14 @@ QUOTE_CHAR = '"'
 def rub_to_thousand(x: int):
     return int(round(0.001*float(x)))
 
+
 def mln_to_thousand(x: int):
     return 1000*int(x)
 
+
 def identity(x):
     return int(x) 
+
 
 # transform strings
 def okved3(code_string: str):
@@ -54,10 +55,6 @@ def get_unit_adjuster(unit_name: str):
         raise ValueError("Unit not supported: %s" % unit_name)
     
 
-def as_ordered_dict(row):
-    return OrderedDict(columns.COLUMNS, row)
-   
-
 def make_text(rowd: OrderedDict):
     # assemble new text columns
     ok1, ok2, ok3 = okved3(rowd['okved'])
@@ -68,31 +65,28 @@ def make_text(rowd: OrderedDict):
             rowd['okpo'], rowd['okopf'], rowd['okfs'],
             rowd['unit']]
 
+
 def make_text_columns():
     return ['ok1', 'ok2', 'ok3',
             'org', 'title', 'region', 'inn',
             'okpo', 'okopf', 'okfs',
             'unit']
-    
-# may change
-def dtypes(lookup_dict):
-    """Return types correspoding to get_colnames().
-       Used to speed up CSV import. """
-    dtype_dict = {k: INT_TYPE for k in columns.new_colnames(lookup_dict)}
-    for key in ['org', 'title', 'region', 'inn',
-                'okpo', 'okopf', 'okfs',
-                'unit']:
-        dtype_dict[key] = str
-    return dtype_dict
+
 
 def make_data(rowd: OrderedDict, data_columns):
     # adjust values to '000 rub 
     func = get_unit_adjuster(unit_name=rowd['unit'])
     return [func(rowd[k]) for k in data_columns]
 
+
 def make_row_parser(lookup_dict):
-    names = columns.new_colnames(lookup_dict)
-    data_columns = columns.data_columns(lookup_dict) 
+    cols = columns.long_colnames(lookup_dict)
+    data_cols = columns.data_colnames(lookup_dict) 
     def parse(row):
-        rowd = OrderedDict(names, names)
-        return make_text(rowd) + make_data(rowd, data_columns)
+        rowd = OrderedDict(zip(cols, row))
+        return make_text(rowd) + make_data(rowd, data_cols)
+    return parse
+
+
+def colnames(lookup_dict):
+    return make_text_columns() + columns.data_colnames(lookup_dict)
