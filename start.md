@@ -16,8 +16,3 @@ exclude = [
     "0603281577", # ЮГ-ЛЕС
     ]
 
-# АГРОТОРГ
-# https://sbis.ru/contragents/7825706086
-# https://www.list-org.com/company/19562
-# https://egrul.nalog.ru/index.html
-
