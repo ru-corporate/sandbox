@@ -1,4 +1,5 @@
 import pandas as pd
+from tqdm import tqdm
 
 from boo.read import reader
 from boo.util import files
@@ -20,7 +21,7 @@ class Corporate:
     def build(self):        
         self.echo("Saving processed CSV file to %s..." % self.path)
         files.save_rows(self.year, 
-                        stream = self.d.rows(), 
+                        stream = tqdm(self.d.rows(), unit=' lines'), 
                         column_names = self.d.colnames)
         self.echo("Done")
         

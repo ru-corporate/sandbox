@@ -1,6 +1,7 @@
 """Download CSV file from Rosstat web site."""
 
 import requests
+from tqdm import tqdm
 
 from boo.util import files
 from boo.util import  messenger
@@ -22,10 +23,13 @@ def url(year):
 assert url(2012) == 'http://www.gks.ru/opendata/storage/7708234640-bdboo2012/data-20181029t000000-structure-20121231t000000.csv'
 
 
+def tqdm_curl(iterable):
+    return tqdm(iterable, unit=' k')
+
 def curl(url: str, path: str):
     r = requests.get(url, stream=True)
     with open(path, 'wb') as f:
-        for chunk in r.iter_content(chunk_size=1024):
+        for chunk in tqdm_curl(r.iter_content(chunk_size=1024)):
             if chunk:  # filter out keep-alive new chunks
                 f.write(chunk)
 
