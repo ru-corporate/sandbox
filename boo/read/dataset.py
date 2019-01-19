@@ -58,17 +58,17 @@ def inn(gen, *inns):
     else:
         return result    
 
-#TODO: move to tests
-if __name__ == '__main__':
-    from boo.file.path import raw    
-    from boo.rename import DEFAULT_LOOKUP_DICT
-    d = Dataset(raw(2012), DEFAULT_LOOKUP_DICT)
-    print(next(d.raws()))
-    print(next(d.rows()))
-    print(next(d.dicts()))
-    x = inn(d.dicts(), 2457009983)
-    bool1 = x['cf_oper'] + x['cf_inv'] + x['cf_fin'] == x['cf']
-    bool2 = x['tp_capital'] + x['tp_long'] + x['tp_short'] == x['tp']
-    bool3 = x['ta_nonfix'] + x['ta_fix'] == x['ta']
-    # cf is not zero
-    print ([bool1, bool2, bool3])
+##TODO: move to tests
+#if __name__ == '__main__':
+#    from boo.file.path import raw    
+#    from boo.rename import DEFAULT_LOOKUP_DICT
+#    d = Dataset(raw(2012), DEFAULT_LOOKUP_DICT)
+#    print(next(d.raws()))
+#    print(next(d.rows()))
+#    print(next(d.dicts()))
+#    x = inn(d.dicts(), 2457009983)
+#    bool1 = x['cf_oper'] + x['cf_inv'] + x['cf_fin'] == x['cf']
+#    bool2 = x['tp_capital'] + x['tp_long'] + x['tp_short'] == x['tp']
+#    bool3 = x['ta_nonfix'] + x['ta_fix'] == x['ta']
+#    # cf is not zero
+#    print ([bool1, bool2, bool3])
