@@ -1,40 +1,35 @@
 from collections import OrderedDict
 import itertools
-from numpy import int64 
 
 from boo.util import files
-from boo.read import row
+from boo.read import row, columns
 from boo import rename
 
-INT_TYPE = int64    
-
 class Dataset: 
-    def __init__(self, year, lookup_dict=rename.DEFAULT_LOOKUP_DICT):
+    def __init__(self, 
+                 year, 
+                 lookup_dict=rename.DEFAULT_LOOKUP_DICT,
+                 provide_rows=files.yield_raw_rows):
        self.year = year
+       self.provide_rows = provide_rows
        self.parse_row = row.make_row_parser(lookup_dict)
-       self.colnames = row.colnames(lookup_dict)       
+       self.colnames = row.colnames(lookup_dict)
+       self.to_dict = lambda row: OrderedDict(zip(self.colnames, row))  
 
     def raws(self):
-        return files.yield_raw_rows(self.year)    
+        return self.provide_rows(self.year)    
 
     def rows(self):
         return map(self.parse_row, self.raws())
         
     def dicts(self):
-        def to_dict(row):
-            return OrderedDict(zip(self.colnames, row)) 
-        return map(to_dict, self.rows())
+        return map(self.to_dict, self.rows())
 
     @property 
     def dtypes(self):
         """Return types correspoding to self.colnames().
            Used to speed up CSV import. """
-        dtype_dict = {k: INT_TYPE for k in self.colnames}
-        for key in ['org', 'title', 'region', 'inn',
-                    'okpo', 'okopf', 'okfs',
-                    'unit']:
-            dtype_dict[key] = str
-        return dtype_dict
+        return columns.dtypes(self.colnames) 
 
 def length(gen):
     return sum(1 for _ in gen)
