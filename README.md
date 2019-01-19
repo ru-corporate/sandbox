@@ -17,7 +17,7 @@ python -i start.py
 
 `start.py` включает следующий пример:
 
-```
+```python
 from boo import Corporate
 
 # Please be prepared download and build operations take a long time!
