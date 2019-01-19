@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 from boo import Corporate
 
-# Начать загрузку если нет
 d = Corporate(2017)
 
 try:    
@@ -17,12 +16,13 @@ except NameError:
            [(df.cf != 0) & (df.ta != 0)] \
            .sort_values(['sales'], ascending=False) \
            .head(200) \
-           [['title','sales', 'ok1','inn', 'ta', 'cf_oper']]
+           [['title','ok1','inn', 'ta', 'sales', 'cf_oper']]
 
+'sales',           
+           
 def ab(t, n=20):
    return df[df.ok1==t].head(n)
  
-# ------
 def bln(x):
     return str(round(x/10**6, 0)).rjust(5) 
     
@@ -31,7 +31,6 @@ for b in bs.itertuples():
     print (b.inn, str(b.ok1).rjust(2), bln(b.sales), bln(b.cf_oper), 
            round(b.sales/b.ta,1), 
            b.title)
-# ------
 
 def annotate(cs, x='ta', y='sales'):
     cs = cs.set_index('title')
@@ -154,7 +153,7 @@ ok = sorted(bs.ok1.unique().tolist())
 # связб с отраслевой статистикой 
 # формы собственности, иностранная
 
-# прототиn публакации
+# прототиn публикации
 # записатьв doi
 # выйти по прошлым годам на ЭКР
 
