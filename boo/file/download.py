@@ -26,11 +26,11 @@ def curl(url: str, path: str, max_chunk=None):
             if max_chunk and i >= max_chunk:
                 break
 
-if __name__ == "__main__":
-    from pathlib import Path
-    assert url(2012) == 'http://www.gks.ru/opendata/storage/7708234640-bdboo2012/data-20181029t000000-structure-20121231t000000.csv'
-    u = url(2012)
-    curl(u, 'dat.dat', 200)
-    p = Path('dat.dat')
-    assert p.stat().st_size == 200 * 1024
-    p.unlink()             
+#if __name__ == "__main__":
+#    from pathlib import Path
+#    assert url(2012) == 'http://www.gks.ru/opendata/storage/7708234640-bdboo2012/data-20181029t000000-structure-20121231t000000.csv'
+#    u = url(2012)
+#    curl(u, 'dat.dat', 200)
+#    p = Path('dat.dat')
+#    assert p.stat().st_size == 200 * 1024
+#    p.unlink()             
