@@ -1,3 +1,5 @@
+[![Coverage Status](https://coveralls.io/repos/github/ru-corporate/sandbox/badge.svg?branch=master)](https://coveralls.io/github/ru-corporate/sandbox?branch=master)
+
 # Бухгалтерская отчетность организаций
 
 Пакет `boo` позволяет скачать и использовать годовую бухгалтерскую отчетность российских компаний, которую 
@@ -109,11 +111,12 @@ df = d.dataframe()
 
 ### 8. Пакет
 
-- частичное скачивание 
+- частичное скачивание по размеру kB
 - тесты
 - `pip install boo`
 - управление местом расположения данных
 - управление проектом через `invoke`
+- более чиcтый вариант логгера
 
 ### 9. Выдача - форматы публикация
 
