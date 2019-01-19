@@ -1,16 +1,25 @@
-from collections import OrderedDict
-import itertools
+import pytest
+from pathlib import Path
 
-from boo.file.path import raw    
 from boo.rename import DEFAULT_LOOKUP_DICT
 from boo.read.dataset import Dataset, inn
+
+from boo.file.download import curl, url
 
 #print(next(d.raws()))
 #print(next(d.rows()))
 #print(next(d.dicts()))
 
-def test_inn():
-    d = Dataset(raw(2012), DEFAULT_LOOKUP_DICT)
+@pytest.fixture
+def temp_file():
+    filename = 'dat.csv'
+    curl(url(2012), filename, 200)
+    yield Path(filename)
+    Path(filename).unlink()
+
+def test_inn(temp_file):
+    d = Dataset(temp_file, DEFAULT_LOOKUP_DICT)
+    # the inn is clode to start of file
     x = inn(d.dicts(), 2457009983)
     bool1 = x['cf_oper'] + x['cf_inv'] + x['cf_fin'] == x['cf']
     bool2 = x['tp_capital'] + x['tp_long'] + x['tp_short'] == x['tp']
