@@ -1,10 +1,14 @@
-# http://info.avtovaz.ru/files/avtovaz_ras_12m_2013.pdf 
+# 
+# Описания полей отчетности можно посмотреть например в:
+# http://info.avtovaz.ru/files/avtovaz_ras_fs_2012_rus_secured.pdf
+# 
+# Более подробно:
+# http://www.consultant.ru/document/cons_doc_LAW_103394/b990bf4a13bd23fda86e0bba50c462a174c0d123/#dst100515
+# 
 
-def lookup_dict(tuples):
-    return {t[0]:t[1] for t in tuples}
-
-DEFAULT_LOOKUP_DICT = lookup_dict([
- ('1150', 'of',                  'Основные фонды'),
+# TODO: проставить названия полей
+FIELDS = [
+ ('1150', 'of',                 'Основные фонды'),
  ('1100', 'ta_fix',             ''),
  ('1200', 'ta_nonfix',          ''),
  ('1600', 'ta',                 ''),
@@ -14,10 +18,14 @@ DEFAULT_LOOKUP_DICT = lookup_dict([
  ('1500', 'tp_short',           ''),
  ('1510', 'debt_short',         ''),
  ('1700', 'tp'                  ''),
+
+
  ('2110', 'sales',              ''),
  ('2200', 'profit_oper',        ''),
  ('2330', 'exp_interest',       ''),
  ('2300', 'profit_before_tax',  ''), 
+
+
  ('4100', 'cf_oper',            ''),
  ('4200', 'cf_inv',             ''),
  ('4300', 'cf_fin',             ''),
@@ -30,4 +38,5 @@ DEFAULT_LOOKUP_DICT = lookup_dict([
  ('4124', 'paid_profit_tax',    ''),
  ('4129', 'paid_other_costs',   ''),
  ('4221', 'paid_fa_investment', '')]
-)
+
+DEFAULT_LOOKUP_DICT = {t[0]:t[1] for t in FIELDS)
