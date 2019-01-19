@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.com/ru-corporate/sandbox.svg?branch=master)](https://travis-ci.com/ru-corporate/sandbox)
 [![Coverage Status](https://coveralls.io/repos/github/ru-corporate/sandbox/badge.svg?branch=master)](https://coveralls.io/github/ru-corporate/sandbox?branch=master)
-
+ 
 # Бухгалтерская отчетность организаций
 
 Пакет `boo` позволяет скачать и использовать годовую бухгалтерскую отчетность российских компаний, которую 
