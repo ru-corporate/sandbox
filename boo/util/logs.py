@@ -1,8 +1,13 @@
-# -*- coding: utf-8 -*-
-"""Functions for other modules (screen messages and error logger)."""
+"""Functions for other modules (screen messages and error logger).
+
+Has:
+- elapsed time decorator
+- logger
+- progress bar
+
+"""
 
 import time
-#import config
 
 
 def print_elapsed_time(foo):
