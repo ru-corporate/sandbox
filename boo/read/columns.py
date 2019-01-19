@@ -1,5 +1,8 @@
 """Create column names."""
 
+from numpy import int64 
+INT_TYPE = int64    
+
 # Provided at Rosstat web site
 TTL_COLUMNS = ['Наименование', 'ОКПО', 'ОКОПФ', 'ОКФС', 'ОКВЭД', 'ИНН', 
             'Код единицы измерения', 'Тип отчета', '11103', '11104', '11203', 
@@ -91,6 +94,18 @@ def long_colnames(lookup_dict):
 def data_colnames(lookup_dict):
     return [str(x) for x in change(lookup_dict) if x.isin(lookup_dict)]
 
+def dtypes(colnames):
+    """Return types correspoding to long_colnames().
+       Used to speed up CSV import. 
+    """
+    dtype_dict = {k: INT_TYPE for k in colnames}
+    for key in ['org', 'title', 'region', 'inn',
+                'okpo', 'okopf', 'okfs',
+                'unit', 'date_published']:
+        dtype_dict[key] = str
+    return dtype_dict
+
 if __name__ == '__main__':
     print(long_colnames({'1110':'of'}))    
-    print(data_colnames({'1110':'of'}))    
+    print(data_colnames({'1110':'of'}))
+    print(dtypes('of ta title'.split(' ')))    

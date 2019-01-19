@@ -39,4 +39,4 @@ FIELDS = [
  ('4129', 'paid_other_costs',   ''),
  ('4221', 'paid_fa_investment', '')]
 
-DEFAULT_LOOKUP_DICT = {t[0]:t[1] for t in FIELDS)
+DEFAULT_LOOKUP_DICT = {t[0]:t[1] for t in FIELDS}
