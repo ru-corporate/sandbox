@@ -16,15 +16,9 @@ def yield_rows_by_path(path, enc='windows-1251', sep=";"):
 
 def wopen(path): 
     return open(path, 'w', encoding="utf-8")
-
-
-def does_not_exist(path):        
-    if os.path.exists(path):
-        raise FileExistsError("File already exists: %s" % path)
     
     
 def save_rows_to_path(path, stream, column_names=None):
-    does_not_exist(path)
     with wopen(path) as file:
         writer = csv.writer(file, **FMT)
         if column_names:
@@ -33,7 +27,6 @@ def save_rows_to_path(path, stream, column_names=None):
 
 
 def save_dicts_to_path(path, dict_stream, column_names):
-    does_not_exist(path)
     with wopen(path) as file:
         writer = csv.DictWriter(file, fieldnames=column_names, **FMT)
         for d in dict_stream: 
