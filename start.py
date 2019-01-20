@@ -6,13 +6,19 @@ print("Please be prepared download and build operations "
       "can take several minutes!")
 
 # download raw file from Rosstat
-#download(2012)
+try:
+   download(2012)
+except FileExistsError:
+   print("Raw file already downloaded")
 
-# create truncated version with fewer columns and rename columns 
-#build(2012)
+# create truncated version with fewer columns and good column names 
+try:
+   build(2012)
+except FileExistsError:
+   print("Work file already created")    
 
 # read trimmed version as dataframe
 df = read_dataframe(2012)
 
 print("Here is a summary of 2012 dataset:")
-print(df.describe().transpose())
+print(df.shape[0], "rows and", df.shape[1], "columns")
