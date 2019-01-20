@@ -1,19 +1,18 @@
 """Download and truncate Rosstat corporate dataset."""
 
-from boo import Corporate
+from boo import download, build, read_dataframe
 
-# Please be prepared download and build operations take a long time!
+print("Please be prepared download and build operations "
+      "can take several minutes!")
 
-d = Corporate(2012)
-
-# download row file from Rosstat
-d.download()
+# download raw file from Rosstat
+#download(2012)
 
 # create truncated version with fewer columns and rename columns 
-d.build()
+#build(2012)
 
 # read trimmed version as dataframe
-df = d.dataframe()
+df = read_dataframe(2012)
 
-print("Here is the start of 2012 dataset:")
-print(df.head())
+print("Here is a summary of 2012 dataset:")
+print(df.describe().transpose())

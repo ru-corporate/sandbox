@@ -1,12 +1,12 @@
 import matplotlib.pyplot as plt
-from boo import Corporate
+from boo import Year
 
-d = Corporate(2017)
+y = Year(2017)
 
 try:    
   df
 except NameError:
-  df = d.dataframe()
+  df = y.dataframe()
 
 # Посмотреть крупнейшие компании
 try:    
@@ -17,8 +17,7 @@ except NameError:
            .sort_values(['sales'], ascending=False) \
            .head(200) \
            [['title','ok1','inn', 'ta', 'sales', 'cf_oper']]
-
-'sales',           
+     
            
 def ab(t, n=20):
    return df[df.ok1==t].head(n)

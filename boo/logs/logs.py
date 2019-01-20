@@ -9,6 +9,12 @@ Has:
 
 import time
 
+def create(year):
+    prefix = "(%s)" % year
+    def foo(*args):
+        print (prefix, *args)
+    return foo
+
 
 def print_elapsed_time(foo):
     """Print execution time for *f* to screen."""

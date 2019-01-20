@@ -2,7 +2,7 @@ import pytest
 from pathlib import Path
 
 from boo.rename import DEFAULT_LOOKUP_DICT
-from boo.read.dataset import Dataset, inn
+from boo.read.dataset import Parser, Dataset, inn
 
 from boo.file.download import curl, url
 
@@ -25,3 +25,7 @@ def test_inn(temp_file):
     bool2 = x['tp_capital'] + x['tp_long'] + x['tp_short'] == x['tp']
     bool3 = x['ta_nonfix'] + x['ta_fix'] == x['ta']
     assert all([bool1, bool2, bool3])
+    
+def test_dtypes():
+    Parser({1110:'of'}).dtypes
+    

@@ -6,29 +6,44 @@ from boo.read.row import colnames, make_row_parser
 from boo.read.columns import dtypes
 
 
+class Parser:
+    def __init__(self, lookup_dict):
+        self.lookup_dict = lookup_dict
+    
+    @property
+    def colnames(self):
+        return colnames(self.lookup_dict)
+    
+    @property
+    def dtypes(self):
+        """Return types correspoding to self.colnames().
+           Used to speed up CSV import. """
+        return dtypes(self.colnames)     
+    
+    def to_dict(self, row):
+         return OrderedDict(zip(self.colnames, row))
+     
+    def create_parsing_function(self):
+        return make_row_parser(self.lookup_dict)
+
+
 class Dataset:
     def __init__(self, filepath, lookup_dict):
         self.filepath = filepath
-        self.lookup_dict = lookup_dict
-        self.colnames = colnames(lookup_dict)
+        self._parser = Parser(lookup_dict)
 
     def raws(self):
         return yield_rows_by_path(self.filepath)
 
     def rows(self):
-        parse_row = make_row_parser(self.lookup_dict)
+        parse_row = self._parser.create_parsing_function()
         return map(parse_row, self.raws())
 
     def dicts(self): 
-        def to_dict(row):
-            return OrderedDict(zip(self.colnames, row))    
-        return map(to_dict, self.rows())
-
-    @property
-    def dtypes(self):
-        """Return types correspoding to self.colnames().
-        Used to speed up CSV import. """
-        return dtypes(self.colnames) 
+        return map(self._parser.to_dict, self.rows())
+    
+    def colnames(self):
+        return self._parser.colnames
 
 
 def length(gen):
@@ -57,18 +72,3 @@ def inn(gen, *inns):
         return result[0]
     else:
         return result    
-
-##TODO: move to tests
-#if __name__ == '__main__':
-#    from boo.file.path import raw    
-#    from boo.rename import DEFAULT_LOOKUP_DICT
-#    d = Dataset(raw(2012), DEFAULT_LOOKUP_DICT)
-#    print(next(d.raws()))
-#    print(next(d.rows()))
-#    print(next(d.dicts()))
-#    x = inn(d.dicts(), 2457009983)
-#    bool1 = x['cf_oper'] + x['cf_inv'] + x['cf_fin'] == x['cf']
-#    bool2 = x['tp_capital'] + x['tp_long'] + x['tp_short'] == x['tp']
-#    bool3 = x['ta_nonfix'] + x['ta_fix'] == x['ta']
-#    # cf is not zero
-#    print ([bool1, bool2, bool3])
