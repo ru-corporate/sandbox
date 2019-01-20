@@ -9,6 +9,7 @@ from boo.read.columns import dtypes
 class Parser:
     def __init__(self, lookup_dict):
         self.lookup_dict = lookup_dict
+        self._parse = make_row_parser(lookup_dict)
     
     @property
     def colnames(self):
@@ -23,8 +24,8 @@ class Parser:
     def to_dict(self, row):
          return OrderedDict(zip(self.colnames, row))
      
-    def create_parsing_function(self):
-        return make_row_parser(self.lookup_dict)
+    def parse_row(self, row):
+        return self._parse(row)
 
 
 class Dataset:
@@ -36,8 +37,7 @@ class Dataset:
         return yield_rows_by_path(self.filepath)
 
     def rows(self):
-        parse_row = self._parser.create_parsing_function()
-        return map(parse_row, self.raws())
+        return map(self._parser.parse_row, self.raws())
 
     def dicts(self): 
         return map(self._parser.to_dict, self.rows())

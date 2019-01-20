@@ -17,21 +17,21 @@ RENAME_TEXT = {'Наименование': 'name',
               'Дата актуализации': 'date_published'}
 
 
-fst  = lambda code: code[0]
-last = lambda code: code[-1]
-trim = lambda code: code[0:-1]
-
+def split(text: str):
+    fst  = lambda text: text[0]
+    last = lambda text: text[-1]
+    trim = lambda text: text[0:-1]
+    prefix = text
+    postfix = ""
+    if fst(text) != "3" and last(text) in ["3", "4"]:
+        prefix = trim(text)
+        if last(text) == "4": 
+            postfix = "_lag"
+    return prefix, postfix
+    
 class Colname:
     def __init__(self, text):
-        self.prefix = text
-        self.postfix = ""
-        if fst(text) != "3" and last(text) in ["3", "4"]:
-            self.prefix = trim(text)
-            if last(text) == "4": 
-                self.postfix = "_lag"
-    
-    def __repr__(self):
-        return self.__str__()
+        self.prefix, self.postfix = split(text)
     
     def __str__(self):
         return self.prefix + self.postfix
@@ -46,35 +46,42 @@ def change_by_dict(columns, lookup_dict):
     return columns    
 
 
-def colnames():
-    return change_by_dict([Colname(x) for x in TTL_COLUMNS], RENAME_TEXT)
-
-
-def filter_by_dict(columns, named_values):
+def filter_by_dict(columns, lookup_dict):
+    named_values = list(lookup_dict.values())
     result = []
     # we need just values in lookup_dict, 'of' in {'1110': 'of'}
     for c in columns:
         if c.prefix in named_values: 
             result.append(c)
-    return result     
-
-
-def to_string(columns):
-    return [str(x) for x in columns]
+    return result  
 
 
 def str_keys(d):
     return {str(k):v for k,v in d.items()}
 
-
+class Colnames:
+    def __init__(self, ttl_codes=TTL_COLUMNS):
+        self.colnames = change_by_dict([Colname(x) for x in ttl_codes], RENAME_TEXT)
+       
+    def rename(self, lookup_dict):
+        self.colnames = change_by_dict(self.colnames, str_keys(lookup_dict))
+        return self
+        
+    def filter(self, lookup_dict):
+        self.colnames = filter_by_dict(self.colnames, str_keys(lookup_dict))
+        return self
+        
+    def as_strings(self):
+        return [str(x) for x in self.colnames]      
+        
+# below are public functions
+        
 def long_colnames(lookup_dict):
-    return to_string(change_by_dict(colnames(), str_keys(lookup_dict)))
+    return Colnames().rename(lookup_dict).as_strings()      
 
 
 def data_colnames(lookup_dict):    
-    a = change_by_dict(colnames(), str_keys(lookup_dict))
-    b = filter_by_dict(a, lookup_dict.values())
-    return to_string(b)
+    return Colnames().rename(lookup_dict).filter(lookup_dict).as_strings()    
 
 
 def dtypes(colnames):

@@ -1,9 +1,6 @@
 from collections import OrderedDict
 
-try: 
-   from . import columns 
-except ImportError:
-   import columns
+from boo.read import columns
 
 
 EMPTY = int('0')
