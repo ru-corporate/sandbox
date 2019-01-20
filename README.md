@@ -1,10 +1,11 @@
 [![Build Status](https://travis-ci.com/ru-corporate/sandbox.svg?branch=master)](https://travis-ci.com/ru-corporate/sandbox)
 [![Coverage Status](https://coveralls.io/repos/github/ru-corporate/sandbox/badge.svg?branch=master)](https://coveralls.io/github/ru-corporate/sandbox?branch=master)
+[![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/ru-corporate-talk/community) 
  
 # Бухгалтерская отчетность организаций
 
-Пакет `boo` позволяет скачать и использовать годовую бухгалтерскую отчетность российских компаний, которую 
-[Росстат публикует][gks] начиная с 2012 года.
+Пакет `boo` позволяет скачать и использовать годовую бухгалтерскую отчетность 
+российских компаний, которую [Росстат публикует][gks] начиная с 2012 года.
 
 [gks]: http://www.gks.ru/opendata/dataset?q=%D0%BE%D1%82%D1%87%D0%B5%D1%82%D0%BD%D0%BE%D1%81%D1%82%D1%8C+%D0%BE%D1%80%D0%B3%D0%B0%D0%BD%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B9+&sort=score+desc%2C+metadata_modified+desc
 
