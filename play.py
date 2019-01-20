@@ -1,22 +1,23 @@
 import matplotlib.pyplot as plt
-from boo import Year
-
-y = Year(2017)
+from boo import read_dataframe
 
 try:    
   df
 except NameError:
-  df = y.dataframe()
+  df = read_dataframe(2017)
 
 # Посмотреть крупнейшие компании
+def nlargest(df, n=200, key='sales'):
+    return df[['title','ok1','inn', 'ta', 'sales', 'cf_oper']] \
+           [~df.ok1.isin([64,65,66,67])] \
+           [(df.cf != 0) & (df.ta != 0)] \
+           .sort_values([key], ascending=False) \
+           .head(n)
+
 try:    
     bs
 except NameError:
-    bs = df[~df.ok1.isin([64,65,66,67])] \
-           [(df.cf != 0) & (df.ta != 0)] \
-           .sort_values(['sales'], ascending=False) \
-           .head(200) \
-           [['title','ok1','inn', 'ta', 'sales', 'cf_oper']]
+    bs = nlargest(df)
      
            
 def ab(t, n=20):
