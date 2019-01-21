@@ -1,7 +1,6 @@
 """Generic CSV file read and write operations."""
 
 import csv
-import os
 
 FMT = dict(lineterminator="\n", quoting=csv.QUOTE_MINIMAL)
 

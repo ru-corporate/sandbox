@@ -15,7 +15,7 @@ def data_folder():
 
 
 def is_valid(year:int):
-    return year in list(range(YEAR_0, YEAR_LAST+1))
+    return year in [0] + list(range(YEAR_0, YEAR_LAST+1))
 
 
 # Provided at Rosstat web site

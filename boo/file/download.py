@@ -9,10 +9,13 @@ def url(year):
     Construct filenames similar to
     http://www.gks.ru/opendata/storage/7708234640-bdboo2012/data-20181029t000000-structure-20121231t000000.csv
     """
-    return ('http://www.gks.ru/opendata/storage/' +
-            '7708234640-bdboo{}/'.format(year) +
-            'data-20181029t000000-structure-{}1231t000000.csv'.format(year)
-            )
+    if year == 0:
+        return "https://raw.githubusercontent.com/ru-corporate/sandbox/master/assets/sample.txt"
+    else: 
+        return ('http://www.gks.ru/opendata/storage/' +
+                '7708234640-bdboo{}/'.format(year) +
+                'data-20181029t000000-structure-{}1231t000000.csv'.format(year)
+                )
 
 def curl(url: str, path: str, max_chunk=None):
     r = requests.get(url, stream=True)

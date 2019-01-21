@@ -32,7 +32,7 @@ def build(year, lookup_dict=DEFAULT_LOOKUP_DICT):
     d = Dataset(raw_path, lookup_dict)
     gen = tqdm(d.rows(), unit=' lines')
     print("Reading and processing CSV file", raw_path)
-    save_rows_to_path(processed_path, stream=gen, columns_names=d.colnames)
+    save_rows_to_path(processed_path, stream=gen, column_names=d.colnames())
     print("Saved processed CSV file as", processed_path) 
     return processed_path    
 
