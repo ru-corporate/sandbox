@@ -12,7 +12,7 @@ from boo.settings import is_valid
 def validate(year: int):
     if not is_valid(year):            
        raise ValueError("Year not supported: %i" % year) 
-    print(year)   
+    print("Year:", year)   
 
 def args(year):
     validate(year)
@@ -38,6 +38,7 @@ def build(year, lookup_dict=DEFAULT_LOOKUP_DICT):
 
 def read_dataframe(year, lookup_dict=DEFAULT_LOOKUP_DICT):
     _, _, processed_path = args(year)
+    print("Reading processed CSV file", processed_path)
     dtypes = Parser(lookup_dict).dtypes
     return _dataframe(processed_path, dtypes)                    
 

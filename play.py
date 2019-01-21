@@ -1,25 +1,22 @@
 import matplotlib.pyplot as plt
 from boo import read_dataframe
+import pick
 
 try:    
   df
 except NameError:
   df = read_dataframe(2017)
-
-# Посмотреть крупнейшие компании
-def nlargest(df, n=200, key='sales'):
-    return df[['title','ok1','inn', 'ta', 'sales', 'cf_oper']] \
-           [~df.ok1.isin([64,65,66,67])] \
-           [(df.cf != 0) & (df.ta != 0)] \
-           .sort_values([key], ascending=False) \
-           .head(n)
+  
+try:    
+  df0
+except NameError:
+  df0 = pick.filter0(df)
 
 try:    
     bs
 except NameError:
-    bs = nlargest(df)
-     
-           
+    bs = pick.nlargest(df0, 'sales', 500)
+
 def ab(t, n=20):
    return df[df.ok1==t].head(n)
  
