@@ -1,12 +1,9 @@
 from pathlib import Path
 
 # path to data folder relative to this file 
-DATA_FOLDER = "../data"
-
+DATA_FOLDER = "../data" # alternative: data
 YEAR_0 = 2012
 YEAR_LAST = 2017
-
-#TODO: URL list is here
 
 
 def whereami():
