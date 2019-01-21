@@ -28,10 +28,15 @@ class Test_Sample_Download:
         fn = build(0)
         assert Path(fn).exists()
     
-    def test_build(self):
+    def test_build_read_returns_dataframe(self):
         download(0)
         build(0)
         df = read_dataframe(0)
         assert isinstance(df, pd.DataFrame)
 
+    def test_build_read_returns_sum(self):
+        download(0)
+        build(0)
+        df = read_dataframe(0)
+        assert sum(df.cf) == -7032726    
     
