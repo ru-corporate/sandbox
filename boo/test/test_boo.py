@@ -1,8 +1,14 @@
 from pathlib import Path
 import pandas as pd
+import pytest
 
-from boo.boo import download, build, read_dataframe
+from boo.boo import download, build, read_dataframe, validate
 from boo.file.path import raw, processed
+
+def test_validate_wrong():
+    with pytest.raises(ValueError):
+        validate(1990)
+
 
 def delete(path):
     try:
