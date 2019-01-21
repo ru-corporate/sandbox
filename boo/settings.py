@@ -11,9 +11,11 @@ def whereami():
 
 
 def data_folder():
-    return whereami().joinpath(DATA_FOLDER).resolve()    
+    f = whereami().joinpath(DATA_FOLDER).resolve()
+    Path(f).mkdir(parents=True, exist_ok=True)
+    return f
 
-
+    
 def is_valid(year:int):
     return year in [0] + list(range(YEAR_0, YEAR_LAST+1))
 
