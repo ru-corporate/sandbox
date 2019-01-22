@@ -1,7 +1,7 @@
 from collections import OrderedDict
 
 from boo.read import columns
-
+from boo.read import dtypes
 
 EMPTY = int('0')
 QUOTE_CHAR = '"'
@@ -87,3 +87,16 @@ def make_row_parser(lookup_dict):
 
 def colnames(lookup_dict):
     return make_text_columns() + columns.data_colnames(lookup_dict)
+    
+    
+class RowParser:
+    def __init__(self, lookup_dict):
+        self.colnames = colnames(lookup_dict)
+        self._parse = make_row_parser(lookup_dict)
+        
+    def to_dict(self, row):
+         return OrderedDict(zip(self.colnames, row))
+     
+    def parse_row(self, row):
+        return self._parse(row)
+    

@@ -1,7 +1,8 @@
 import pandas as pd
 from tqdm import tqdm
 
-from boo.read.dataset import Dataset, Parser
+from boo.read.dataset import Dataset
+from boo.read.dtypes import dtypes
 from boo.file.path import raw, processed, cannot_overwrite
 from boo.file.csv_io import save_rows_to_path
 from boo.file.download import url, curl
@@ -32,16 +33,14 @@ def build(year, lookup_dict=DEFAULT_LOOKUP_DICT):
     d = Dataset(raw_path, lookup_dict)
     gen = tqdm(d.rows(), unit=' lines')
     print("Reading and processing CSV file", raw_path)
-    save_rows_to_path(processed_path, stream=gen, column_names=d.colnames())
+    save_rows_to_path(processed_path, stream=gen, column_names=d.colnames)
     print("Saved processed CSV file as", processed_path) 
     return processed_path    
 
 def read_dataframe(year, lookup_dict=DEFAULT_LOOKUP_DICT):
     _, _, processed_path = args(year)
     print("Reading processed CSV file", processed_path)
-    dtypes = Parser(lookup_dict).dtypes
-    return _dataframe(processed_path, dtypes)                    
-
+    return _dataframe(processed_path, dtypes=dtypes(lookup_dict))
 
 def _dataframe(path, dtypes):
     with open(path, 'r', encoding='utf-8') as f:

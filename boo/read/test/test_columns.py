@@ -13,10 +13,6 @@ def test_long_colnames_on_int():
 def test_long_colnames_on_string():    
     assert columns.long_colnames({'1110':'of'})    
 
-def test_dtypes():
-    assert columns.dtypes(['of', 'ta', 'title']) == \
-           {'of': numpy.int64, 'ta': numpy.int64, 'title': str}
-    
 def test_Colname():    
     columns.Colname('12603').prefix = '1260'
     columns.Colname('12603').postfix = ''
