@@ -9,7 +9,6 @@ def test_validate_wrong():
     with pytest.raises(ValueError):
         validate(1990)
 
-
 def delete(path):
     try:
         Path(path).unlink() 
