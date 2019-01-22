@@ -1,4 +1,3 @@
-
 from boo.file.csv_io import yield_rows_by_path
 from boo.read.row import RowParser
 
