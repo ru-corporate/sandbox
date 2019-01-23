@@ -1,6 +1,7 @@
 from boo.file.csv_io import yield_rows_by_path
 from boo.read.row import RowParser
 
+
 class Dataset:
     def __init__(self, filepath, lookup_dict):
         self.filepath = filepath
@@ -12,12 +13,9 @@ class Dataset:
     def rows(self):
         return map(self.parser.parse_row, self.raws())
 
-    def dicts(self): 
+    def dicts(self):
         return map(self.parser.to_dict, self.rows())
-        
-    @property    
+
+    @property
     def colnames(self):
         return self.parser.colnames
-        
-        
-        

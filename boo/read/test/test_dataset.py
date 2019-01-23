@@ -8,9 +8,10 @@ from boo.read.dataset import Dataset
 
 from boo.file.download import curl, url
 
-#print(next(d.raws()))
-#print(next(d.rows()))
-#print(next(d.dicts()))
+# print(next(d.raws()))
+# print(next(d.rows()))
+# print(next(d.dicts()))
+
 
 @pytest.fixture
 def temp_file():
@@ -18,6 +19,7 @@ def temp_file():
     curl(url(2012), filename, 200)
     yield Path(filename)
     Path(filename).unlink()
+
 
 def test_inn(temp_file):
     d = Dataset(temp_file, DEFAULT_LOOKUP_DICT)
@@ -27,7 +29,7 @@ def test_inn(temp_file):
     bool2 = x['tp_capital'] + x['tp_long'] + x['tp_short'] == x['tp']
     bool3 = x['ta_nonfix'] + x['ta_fix'] == x['ta']
     assert all([bool1, bool2, bool3])
-   
+
 
 def length(gen):
     return sum(1 for _ in gen)
@@ -38,20 +40,22 @@ def slice(gen, i, j):
 
 
 def nth(gen, n):
-    return slice(gen, n+1)[0]
+    return slice(gen, n + 1)[0]
 
-#FIXME:
+# FIXME:
+
+
 def inn(gen, *inns):
     result = []
     inns_ = [str(i) for i in inns]
     for d in gen:
-        i = d['inn'] 
+        i = d['inn']
         if i in inns_:
             result.append(d)
             inns_.remove(i)
-        if inns_==[]:
+        if inns_ == []:
             break
-    if length(result) == 1: 
+    if length(result) == 1:
         return result[0]
     else:
-        return result    
+        return result

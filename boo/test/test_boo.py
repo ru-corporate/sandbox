@@ -5,34 +5,37 @@ import pytest
 from boo.boo import download, build, read_dataframe, validate
 from boo.file.path import raw, processed
 
+
 def test_validate_wrong():
     with pytest.raises(ValueError):
         validate(1990)
 
+
 def delete(path):
     try:
-        Path(path).unlink() 
+        Path(path).unlink()
     except FileNotFoundError:
-        pass         
-   
+        pass
+
+
 class Test_Sample_Download:
-    
+
     def setup_method(self):
         delete(raw(0))
         delete(processed(0))
 
     def teardown_method(self):
         self.setup_method()
-        
+
     def test_download(self):
         fn = download(0)
         assert Path(fn).exists()
-    
+
     def test_build(self):
         download(0)
         fn = build(0)
         assert Path(fn).exists()
-    
+
     def test_build_read_returns_dataframe(self):
         download(0)
         build(0)
@@ -43,5 +46,4 @@ class Test_Sample_Download:
         download(0)
         build(0)
         df = read_dataframe(0)
-        assert sum(df.cf) == -7032726    
-    
+        assert sum(df.cf) == -7032726

@@ -9,15 +9,15 @@ year = 2012
 
 # download raw file from Rosstat
 try:
-   download(year)
+    download(year)
 except FileExistsError:
-   print("Raw file already downloaded")
+    print("Raw file already downloaded")
 
-# create truncated version with fewer columns and good column names 
+# create truncated version with fewer columns and good column names
 try:
-   build(year)
+    build(year)
 except FileExistsError:
-   print("Work file already created")    
+    print("Work file already created")
 
 # read trimmed version of data as dataframe
 df = read_dataframe(year)
@@ -31,11 +31,11 @@ print(year, "dataset:", df.shape[0], "rows and", df.shape[1], "columns")
 
 # TODO: сделать текстовую строку с информацией о компании
 #       АВТОВАЗ (Открытое акционерное общество)
-#       ИНН: 6320002223 
+#       ИНН: 6320002223
 #       Регион: 63
-#       ОКВЭД: 
+#       ОКВЭД:
 
-# TODO: Что такое okpo, okopf, okfs? Чем полезны в анализе?    
+# TODO: Что такое okpo, okopf, okfs? Чем полезны в анализе?
 
 """
 ok1                                               34
@@ -52,7 +52,7 @@ unit                                             385
 """
 
 
-# TODO: сделать представление баланса, ОПУ, ОДДС 
+# TODO: сделать представление баланса, ОПУ, ОДДС
 #       Каких переменных не хватате для анализа?
 
 # Пример (ОПУ):

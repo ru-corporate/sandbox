@@ -9,22 +9,22 @@ QUOTE_CHAR = '"'
 
 # transform numbers
 def rub_to_thousand(x: int):
-    return int(round(0.001*float(x)))
+    return int(round(0.001 * float(x)))
 
 
 def mln_to_thousand(x: int):
-    return 1000*int(x)
+    return 1000 * int(x)
 
 
 def identity(x):
-    return int(x) 
+    return int(x)
 
 
 # transform strings
 def okved3(code_string: str):
     """Get 3 levels of OKVED codes from *code_string*."""
     codes = [int(x) for x in code_string.split(".")]
-    return codes + [EMPTY] * (3-len(codes))
+    return codes + [EMPTY] * (3 - len(codes))
 
 
 def dequote(name: str):
@@ -39,7 +39,7 @@ def dequote(name: str):
         title = QUOTE_CHAR.join(parts[1:])
     else:
         title = name
-    return org, title.strip()    
+    return org, title.strip()
 
 
 def get_unit_adjuster(unit_name: str):
@@ -50,13 +50,13 @@ def get_unit_adjuster(unit_name: str):
         return mapper[unit_name]
     except KeyError:
         raise ValueError("Unit not supported: %s" % unit_name)
-    
+
 
 def make_text(rowd: OrderedDict):
     # assemble new text columns
     ok1, ok2, ok3 = okved3(rowd['okved'])
     org, title = dequote(rowd['name'])
-    region = rowd['inn'][0:2]        
+    region = rowd['inn'][0:2]
     return [ok1, ok2, ok3,
             org, title, region, rowd['inn'],
             rowd['okpo'], rowd['okopf'], rowd['okfs'],
@@ -71,14 +71,15 @@ def make_text_columns():
 
 
 def make_data(rowd: OrderedDict, data_columns):
-    # adjust values to '000 rub 
+    # adjust values to '000 rub
     func = get_unit_adjuster(unit_name=rowd['unit'])
     return [func(rowd[k]) for k in data_columns]
 
 
 def make_row_parser(lookup_dict):
     cols = columns.long_colnames(lookup_dict)
-    data_cols = columns.data_colnames(lookup_dict) 
+    data_cols = columns.data_colnames(lookup_dict)
+
     def parse(row):
         rowd = OrderedDict(zip(cols, row))
         return make_text(rowd) + make_data(rowd, data_cols)
@@ -87,16 +88,15 @@ def make_row_parser(lookup_dict):
 
 def colnames(lookup_dict):
     return make_text_columns() + columns.data_colnames(lookup_dict)
-    
-    
+
+
 class RowParser:
     def __init__(self, lookup_dict):
         self.colnames = colnames(lookup_dict)
         self._parse = make_row_parser(lookup_dict)
-        
+
     def to_dict(self, row):
-         return OrderedDict(zip(self.colnames, row))
-     
+        return OrderedDict(zip(self.colnames, row))
+
     def parse_row(self, row):
         return self._parse(row)
-    
