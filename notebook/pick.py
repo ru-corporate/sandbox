@@ -1,5 +1,10 @@
 from boo.read import row
+from boo import read_dataframe
 
+try:
+    df
+except NameError:
+    df = read_dataframe(2017)
 
 def is_financial(df):
     return df.ok1.isin([64, 65, 66, 67])

@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 from tqdm import tqdm
 
@@ -9,6 +10,10 @@ from boo.file.download import url, curl
 from boo.rename import DEFAULT_LOOKUP_DICT
 from boo.settings import is_valid
 
+
+def cannot_overwrite(path):
+    if os.path.exists(path):
+        raise FileExistsError("File already exists: %s" % path)
 
 def validate(year: int):
     if not is_valid(year):
@@ -37,6 +42,7 @@ def build(year, lookup_dict=DEFAULT_LOOKUP_DICT):
     gen = tqdm(d.rows(), unit=' lines')
     print("Reading and processing CSV file", raw_path)
     save_rows_to_path(processed_path, stream=gen, column_names=d.colnames)
+    #TODO: записываем dtypes https://stackoverflow.com/a/50423394/1758363
     print("Saved processed CSV file as", processed_path)
     return processed_path
 
