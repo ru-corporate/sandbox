@@ -2,14 +2,23 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
-from boo.boo import download, build, read_dataframe, validate
-from boo.file.path import raw, processed
-
+from boo.boo import download, build, read_dataframe, validate, print_year
+from boo.settings import DataFile
 
 def test_validate_wrong():
     with pytest.raises(ValueError):
         validate(1990)
 
+
+@print_year
+def nothing(year):
+    pass
+
+
+def test_print_year_is_callable():
+    nothing(2012)
+    assert True
+    
 
 def delete(path):
     try:
@@ -21,8 +30,8 @@ def delete(path):
 class Test_Sample_Download:
 
     def setup_method(self):
-        delete(raw("sample"))
-        delete(processed("sample"))
+        delete(DataFile(None).raw("sample"))
+        delete(DataFile(None).processed("sample"))
 
     def teardown_method(self):
         self.setup_method()

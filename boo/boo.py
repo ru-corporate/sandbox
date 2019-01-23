@@ -4,11 +4,10 @@ from tqdm import tqdm
 
 from boo.read.dataset import Dataset
 from boo.read.dtypes import dtypes
-from boo.file.path import raw, processed
 from boo.file.csv_io import save_rows_to_path
 from boo.file.download import url, curl
 from boo.rename import DEFAULT_LOOKUP_DICT
-from boo.settings import is_valid
+from boo.settings import is_valid, DataFile
 
 
 def cannot_overwrite(path):
@@ -21,16 +20,17 @@ def validate(year):
         raise ValueError(f"Year not supported: {year}")
 
 
-def args(year):
-    return url(year), raw(year), processed(year)
+def args(year, data_folder=None):
+    validate(year)
+    location = DataFile(data_folder)    
+    return url(year), location.raw(year), location.processed(year)
 
 
 def print_year(func):
-    def func_wrapper(year, *arg, **kwarg):
-        validate(year)
+    def wrapper(year, *arg, **kwarg):        
         print("Year:", year)
         return func(year, *arg, **kwarg)
-    return func_wrapper
+    return wrapper
 
 
 @print_year
@@ -41,11 +41,6 @@ def download(year):
     curl(url, raw_path)
     print("Saved at", raw_path)
     return raw_path
-
-
-@print_year
-def nothing(year):
-    pass
 
 
 @print_year

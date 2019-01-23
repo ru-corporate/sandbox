@@ -1,19 +1,45 @@
 from pathlib import Path
 
-# path to data folder relative to this file
-DATA_FOLDER = "../data"  # alternative: data
+# allowed years
 YEAR_0 = 2012
 YEAR_LAST = 2017
+
+# path to data folder relative to this file
+DATA_FOLDER = "../data"
 
 
 def whereami():
     return Path(__file__).parents[0]
 
 
-def data_folder():
-    f = whereami().joinpath(DATA_FOLDER).resolve()
-    Path(f).mkdir(parents=True, exist_ok=True)
+def default_data_folder(input_path=DATA_FOLDER):
+    f = whereami().joinpath(input_path).resolve()
+    f.mkdir(parents=True, exist_ok=True)
     return f
+
+
+class DataFile:
+    def __init__(self, folder=None):
+        if folder is None:
+            self.folder = default_data_folder()
+        else:
+            if folder.exists():
+                self.folder = folder    
+            else:
+                raise FileNotFoundError(folder)             
+
+    def raw(self, year):
+       return self.folder / self.name("rosstat", year)
+
+    def processed(self, year):
+       return self.folder / self.name("processed", year)
+
+    def dtype(self, year):
+       raise NotImplemented
+
+    @staticmethod    
+    def name(tag:str, year:str):            
+        return f"{tag}-{year}.csv"
 
 
 def is_valid(year: int):
