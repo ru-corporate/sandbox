@@ -17,7 +17,8 @@ def data_folder():
 
 
 def is_valid(year: int):
-    return year in [0] + list(range(YEAR_0, YEAR_LAST + 1))
+    # FIXME: hardcoded in download.py
+    return year in ["sample"] + list(range(YEAR_0, YEAR_LAST + 1))
 
 
 # Provided at Rosstat web site

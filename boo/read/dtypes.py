@@ -3,6 +3,7 @@ INT_TYPE = int64
 
 from boo.read import row
 
+#TODO: записываем dtypes https://stackoverflow.com/a/50423394/1758363
 
 def dtypes(lookup_dict):
     """Return types correspoding to column.long_colnames().

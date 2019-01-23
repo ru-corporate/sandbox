@@ -4,7 +4,7 @@ from tqdm import tqdm
 
 from boo.read.dataset import Dataset
 from boo.read.dtypes import dtypes
-from boo.file.path import raw, processed, cannot_overwrite
+from boo.file.path import raw, processed
 from boo.file.csv_io import save_rows_to_path
 from boo.file.download import url, curl
 from boo.rename import DEFAULT_LOOKUP_DICT
@@ -15,17 +15,25 @@ def cannot_overwrite(path):
     if os.path.exists(path):
         raise FileExistsError("File already exists: %s" % path)
 
-def validate(year: int):
+
+def validate(year):
     if not is_valid(year):
-        raise ValueError("Year not supported: %i" % year)
-    print("Year:", year)
+        raise ValueError(f"Year not supported: {year}")
 
 
 def args(year):
-    validate(year)
     return url(year), raw(year), processed(year)
 
 
+def print_year(func):
+   def func_wrapper(year, *arg, **kwarg):
+       validate(year)
+       print ("Year:", year)
+       return func(year, *arg, **kwarg)
+   return func_wrapper
+
+
+@print_year
 def download(year):
     url, raw_path, _ = args(year)
     cannot_overwrite(raw_path)
@@ -34,7 +42,11 @@ def download(year):
     print("Saved at", raw_path)
     return raw_path
 
+@print_year
+def nothing(year):
+       pass
 
+@print_year
 def build(year, lookup_dict=DEFAULT_LOOKUP_DICT):
     _, raw_path, processed_path = args(year)
     cannot_overwrite(processed_path)
@@ -47,6 +59,7 @@ def build(year, lookup_dict=DEFAULT_LOOKUP_DICT):
     return processed_path
 
 
+@print_year
 def read_dataframe(year, lookup_dict=DEFAULT_LOOKUP_DICT):
     _, _, processed_path = args(year)
     print("Reading processed CSV file", processed_path)

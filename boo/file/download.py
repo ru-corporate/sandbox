@@ -9,7 +9,7 @@ def url(year):
     Construct filenames similar to
     http://www.gks.ru/opendata/storage/7708234640-bdboo2012/data-20181029t000000-structure-20121231t000000.csv
     """
-    if year == 0:
+    if year == "sample":
         return "https://raw.githubusercontent.com/ru-corporate/sandbox/master/assets/sample.txt"
     else:
         return ('http://www.gks.ru/opendata/storage/' +
