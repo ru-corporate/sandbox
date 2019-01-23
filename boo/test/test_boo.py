@@ -9,7 +9,7 @@ from boo.file.path import raw, processed
 def test_validate_wrong():
     with pytest.raises(ValueError):
         validate(1990)
-        
+
 
 def delete(path):
     try:
@@ -35,4 +35,3 @@ class Test_Sample_Download:
         df = read_dataframe("sample")
         assert isinstance(df, pd.DataFrame)
         assert sum(df.cf) == -7032726
-

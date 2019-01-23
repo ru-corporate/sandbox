@@ -6,6 +6,7 @@ try:
 except NameError:
     df = read_dataframe(2017)
 
+
 def is_financial(df):
     return df.ok1.isin([64, 65, 66, 67])
 
@@ -43,8 +44,6 @@ def nlargest(df, key, n):
     return df.sort_values([key], ascending=False).head(n)
 
 
-
-
 # -----------------------------------------------------------------
 
 # df[df.inn == '6320002223'].transpose()
@@ -56,6 +55,7 @@ def nlargest(df, key, n):
 #       ОКВЭД:
 
 # TODO: Что такое okpo, okopf, okfs? Чем полезны в анализе?
+
 
 """
 ok1                                               34
@@ -84,4 +84,3 @@ profit_before_tax                             518000
 """
 
 # TODO: словарь ОПУ, ОДДС
-

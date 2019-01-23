@@ -4,4 +4,4 @@ class Company
 
     @property
     def name(self):
-        return f"{self.row.title} ({self.row.org})"    
+        return f"{self.row.title} ({self.row.org})"

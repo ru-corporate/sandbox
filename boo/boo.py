@@ -26,11 +26,11 @@ def args(year):
 
 
 def print_year(func):
-   def func_wrapper(year, *arg, **kwarg):
-       validate(year)
-       print ("Year:", year)
-       return func(year, *arg, **kwarg)
-   return func_wrapper
+    def func_wrapper(year, *arg, **kwarg):
+        validate(year)
+        print("Year:", year)
+        return func(year, *arg, **kwarg)
+    return func_wrapper
 
 
 @print_year
@@ -42,9 +42,11 @@ def download(year):
     print("Saved at", raw_path)
     return raw_path
 
+
 @print_year
 def nothing(year):
-       pass
+    pass
+
 
 @print_year
 def build(year, lookup_dict=DEFAULT_LOOKUP_DICT):
@@ -54,7 +56,7 @@ def build(year, lookup_dict=DEFAULT_LOOKUP_DICT):
     gen = tqdm(d.rows(), unit=' lines')
     print("Reading and processing CSV file", raw_path)
     save_rows_to_path(processed_path, stream=gen, column_names=d.colnames)
-    #TODO: записываем dtypes https://stackoverflow.com/a/50423394/1758363
+    # TODO: записываем dtypes https://stackoverflow.com/a/50423394/1758363
     print("Saved processed CSV file as", processed_path)
     return processed_path
 
