@@ -6,7 +6,8 @@ import itertools
 from boo.rename import DEFAULT_LOOKUP_DICT
 from boo.read.dataset import Dataset
 
-from boo.file.download import curl, url
+from boo.file.download import curl
+from boo.settings import url
 
 # print(next(d.raws()))
 # print(next(d.rows()))

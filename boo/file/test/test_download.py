@@ -1,7 +1,7 @@
 from pathlib import Path
 
-from boo.file.download import url
 from boo.file.download import curl
+from boo.settings import url
 
 
 def test_url():
