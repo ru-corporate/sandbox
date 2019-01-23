@@ -4,10 +4,10 @@ from tqdm import tqdm
 
 from boo.read.dataset import Dataset
 from boo.read.dtypes import dtypes
-from boo.file.csv_io import save_rows_to_path
-from boo.file.download import url, curl
+from boo.file.csv import save_rows
+from boo.file.download import curl
 from boo.rename import DEFAULT_LOOKUP_DICT
-from boo.settings import is_valid, DataFile
+from boo.settings import is_valid, url, DataFile
 
 
 def cannot_overwrite(path):
@@ -50,7 +50,7 @@ def build(year, lookup_dict=DEFAULT_LOOKUP_DICT):
     d = Dataset(raw_path, lookup_dict)
     gen = tqdm(d.rows(), unit=' lines')
     print("Reading and processing CSV file", raw_path)
-    save_rows_to_path(processed_path, stream=gen, column_names=d.colnames)
+    save_rows(processed_path, stream=gen, column_names=d.colnames)
     # TODO: записываем dtypes https://stackoverflow.com/a/50423394/1758363
     print("Saved processed CSV file as", processed_path)
     return processed_path

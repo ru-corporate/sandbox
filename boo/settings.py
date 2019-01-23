@@ -12,8 +12,12 @@ def whereami():
     return Path(__file__).parents[0]
 
 
-def default_data_folder(input_path=DATA_FOLDER):
-    f = whereami().joinpath(input_path).resolve()
+def resolve_path(input_path):
+    return whereami().joinpath(input_path).resolve()
+
+
+def default_data_folder():
+    f = resolve_path(DATA_FOLDER)
     f.mkdir(parents=True, exist_ok=True)
     return f
 
@@ -42,10 +46,24 @@ class DataFile:
         return f"{tag}-{year}.csv"
 
 
-def is_valid(year: int):
-    # FIXME: hardcoded in download.py
-    return year in ["sample"] + list(range(YEAR_0, YEAR_LAST + 1))
+SAMPLE_TAG = "sample"
 
+def is_valid(year):
+    return year in [SAMPLE_TAG] + list(range(YEAR_0, YEAR_LAST + 1))
+
+
+def url(year):
+    """
+    Construct filenames similar to
+    http://www.gks.ru/opendata/storage/7708234640-bdboo2012/data-20181029t000000-structure-20121231t000000.csv
+    """
+    if year == SAMPLE_TAG:
+        return "https://raw.githubusercontent.com/ru-corporate/sandbox/master/assets/sample.txt"
+    else:
+        return ('http://www.gks.ru/opendata/storage/' +
+                '7708234640-bdboo{}/'.format(year) +
+                'data-20181029t000000-structure-{}1231t000000.csv'.format(year)
+                )
 
 # Provided at Rosstat web site
 TTL_COLUMNS = ['Наименование', 'ОКПО', 'ОКОПФ', 'ОКФС', 'ОКВЭД', 'ИНН',

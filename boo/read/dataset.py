@@ -1,4 +1,4 @@
-from boo.file.csv_io import yield_rows_by_path
+from boo.file.csv import yield_rows
 from boo.read.row import RowParser
 
 
@@ -8,7 +8,7 @@ class Dataset:
         self.parser = RowParser(lookup_dict)
 
     def raws(self):
-        return yield_rows_by_path(self.filepath)
+        return yield_rows(self.filepath)
 
     def rows(self):
         return map(self.parser.parse_row, self.raws())
