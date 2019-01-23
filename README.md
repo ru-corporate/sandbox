@@ -2,9 +2,9 @@
 [![Coverage Status](https://coveralls.io/repos/github/ru-corporate/sandbox/badge.svg?branch=master)](https://coveralls.io/github/ru-corporate/sandbox?branch=master)
 [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/ru-corporate-talk/community) 
  
-# Бухгалтерская отчетность организаций
+# Бухгалтерская отчетность организаций (`boo`)
 
-`boo` ("бухгалтерская отчетность организаций") - скачиваем, причесываем и анализируем годовую отчетность российских компаний по РСБУ.
+Cкачиваем, причесываем и анализируем годовую отчетность российских компаний по РСБУ.
 
 ## Исходные данные
 
