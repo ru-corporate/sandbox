@@ -22,7 +22,7 @@ Cкачиваем, причесываем и анализируем годову
 ## Установка пакета
 
 ```
-git clone https://github.com/ru-corporate/sandbox
+git clone https://github.com/ru-corporate/sandbox.git
 cd sandbox
 pip install -r requirements.txt 
 ```
