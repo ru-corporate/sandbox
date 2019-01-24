@@ -65,6 +65,7 @@ def url(year):
                 'data-20181029t000000-structure-{}1231t000000.csv'.format(year)
                 )
 
+# TODO: перенести в reference.accounts 
 # Provided at Rosstat web site
 TTL_COLUMNS = ['Наименование', 'ОКПО', 'ОКОПФ', 'ОКФС', 'ОКВЭД', 'ИНН',
                'Код единицы измерения', 'Тип отчета', '11103', '11104', '11203',

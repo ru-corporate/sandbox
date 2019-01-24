@@ -4,11 +4,9 @@ from boo.settings import TTL_COLUMNS, RENAME_TEXT
 
 
 def split(text: str):
-    def fst(text): return text[0]
-
-    def last(text): return text[-1]
-
-    def trim(text): return text[0:-1]
+    fst = lambda text: text[0]
+    last = lambda text: text[-1]
+    trim = lambda text: text[0:-1]
     prefix = text
     postfix = ""
     if fst(text) != "3" and last(text) in ["3", "4"]:

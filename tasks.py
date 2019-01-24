@@ -68,7 +68,8 @@ def pep8(ctx, folder=''):
         # FIXME: may use 'import autopep8' without console
         ctx.run("autopep8 --aggressive --aggressive --in-place {}".format(f))
 
-
+#epo@EP_Win8:/mnt/c/Users/Евгений/Documents/GitHub/sandbox$ find . -name \*.pyc -delete
+#epo@EP_Win8:/mnt/c/Users/Евгений/Documents/GitHub/sandbox$ find . -name __pycache__ -delete
 @task
 def clean(ctx):
     """Wipe html documentation (not implemented)"""
