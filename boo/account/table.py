@@ -1,7 +1,5 @@
 from boo.account.names import account_name
-from boo.account.variables import DEFAULT_LOOKUP_DICT, balance, opu, \
-                                  cf_oper, cf_inv, cf_fin 
-
+from boo.account.variables import balance, opu, cf_oper, cf_inv, cf_fin 
 
 
 def row_items(pairs):
@@ -13,26 +11,26 @@ def row(lst):
 def newlined(gen):
     return "\n".join(map(row,gen))
 
-header = ["Код отчетности", "Переменная", "Наименование показателя"]
-mid = [":---------------:", ":---------------", ":------------------------"]
+HEADER = ["Код отчетности", "Переменная", "Наименование показателя"]
+MIDROW = [":------------:", ":--------:", ":---------------------:"]
 
 
 def table(gen):
-    return newlined([header]+[mid]+row_items(opu))
-    
-H = "###"
-print(H, "Баланс")
-print(table(balance))
-print(H, "Отчет о финансовых результатах")
-print(table(opu))
-print(H, "Отчет о движении денежных средств")
-print(H, "Операционная деятельность")
-print(table(cf_oper))
-print(H, "Инвестицонная деятельность")
-print(table(cf_inv))
-print(H, "Финансовая деятельность")
-print(table(cf_fin))
+    return newlined([HEADER]+[MIDROW]+row_items(opu))
 
-# -- Операционная деятельность
-# -- Инвестицонная деятельность
-# -- Финансовая деятельность
+
+if __name__ == '__main__':    
+    H = "\n###"
+    H4 = "\n####"
+    print()
+    print(H, "Баланс")
+    print(table(balance))
+    print(H, "Отчет о финансовых результатах")
+    print(table(opu))
+    print(H, "Отчет о движении денежных средств")
+    print(H4, "Операционная деятельность")
+    print(table(cf_oper))
+    print(H4, "Инвестицонная деятельность")
+    print(table(cf_inv))
+    print(H4, "Финансовая деятельность")
+    print(table(cf_fin))
