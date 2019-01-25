@@ -5,6 +5,7 @@ import pytest
 from boo.boo import download, build, read_dataframe, validate, print_year
 from boo.settings import DataFile
 
+
 def test_validate_wrong():
     with pytest.raises(ValueError):
         validate(1990)
@@ -18,7 +19,7 @@ def nothing(year):
 def test_print_year_is_callable():
     nothing(2012)
     assert True
-    
+
 
 def delete(path):
     try:

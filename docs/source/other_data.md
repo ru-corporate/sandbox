@@ -16,3 +16,20 @@
 - [БИР-Аналитик](https://bir.1prime.ru)
 - [Скрин](https://kontragent.skrin.ru)
 - [Фира-Про](https://pro.fira.ru)
+
+
+# Выдача - форматы публикаций
+
+*Простейшие варианты*
+
+- [ ] markdown  
+- [x] jupiter notebook
+
+*Чуть более сложные варианты*
+- [ ] pdf/latex
+- [ ] pdf/reportlab
+- [ ] react.js презенатция
+- [ ] небольшой статичный сайт (jekyll)
+- [ ] R bookdown
+- [ ] asciidoc  
+  

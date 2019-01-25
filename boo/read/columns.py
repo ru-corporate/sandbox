@@ -4,9 +4,11 @@ from boo.account.variables import TTL_COLUMNS, RENAME_TEXT
 
 
 def split(text: str):
-    fst = lambda text: text[0]
-    last = lambda text: text[-1]
-    trim = lambda text: text[0:-1]
+    def fst(text): return text[0]
+
+    def last(text): return text[-1]
+
+    def trim(text): return text[0:-1]
     prefix = text
     postfix = ""
     if fst(text) != "3" and last(text) in ["3", "4"]:
@@ -36,7 +38,8 @@ def str_keys(d):
 
 def change_by_dict(columns, lookup_dict):
     lookup_dict = str_keys(lookup_dict)
-    rep = lambda colname: replace(lookup_dict, colname)
+
+    def rep(colname): return replace(lookup_dict, colname)
     return [rep(c) for c in columns]
 
 
@@ -65,6 +68,7 @@ def _base_columns():
     return Colnames(TTL_COLUMNS).rename(RENAME_TEXT)
 
 # below are public functions
+
 
 def base_columns():
     return base_columns().as_strings()

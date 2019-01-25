@@ -139,28 +139,29 @@ SECTION_NAMES_TEXT = """БУХГАЛТЕРСКИЙ БАЛАНС	1
 ПОЯСНЕНИЯ К БУХГАЛТЕРСКОМУ БАЛАНСУ И ОТЧЕТУ О ФИНАНСОВЫХ РЕЗУЛЬТАТАХ	5
 ОТЧЕТ О ЦЕЛЕВОМ ИСПОЛЬЗОВАНИИ СРЕДСТВ	6"""
 
+
 def _items(doc: str):
     for x in doc.split('\n'):
         y = x.split('\t')
         try:
             yield (y[0], y[1])
-        except IndexError:    
+        except IndexError:
             raise ValueError(y)
 
-ACCOUNT_NAMES = {b:a for (a, b) in _items(ACCOUNT_NAMES_TEXT)}
-SECTION_NAMES = {b:a for (a, b) in _items(SECTION_NAMES_TEXT)}
+
+ACCOUNT_NAMES = {b: a for (a, b) in _items(ACCOUNT_NAMES_TEXT)}
+SECTION_NAMES = {b: a for (a, b) in _items(SECTION_NAMES_TEXT)}
+
 
 def account_name(code: str):
     """Return account text description by code."""
     return ACCOUNT_NAMES.get(str(code))
 
+
 def account_section(code):
     """Return account section description by code."""
     return SECTION_NAMES.get(str(code)[0])
 
-def account_parent(code):    
-    raise NotImplementedError
-    
-    
 
-    
+def account_parent(code):
+    raise NotImplementedError

@@ -7,4 +7,3 @@ def test_url():
 
 def test_url_on_string():
     assert url("sample")
-

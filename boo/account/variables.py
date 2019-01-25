@@ -61,11 +61,11 @@ RENAME_TEXT = {'Наименование': 'name',
 
 
 DEFAULT_LOOKUP_DICT = dict([
-#--  Баланс       
+    #--  Баланс
     ('1150', 'of'),
     ('1100', 'ta_fix'),
     ('1200', 'ta_nonfix'),
-    ('1250', 'cash'), 
+    ('1250', 'cash'),
     ('1600', 'ta'),
     ('1300', 'tp_capital'),
     ('1400', 'tp_long'),
@@ -73,13 +73,13 @@ DEFAULT_LOOKUP_DICT = dict([
     ('1500', 'tp_short'),
     ('1510', 'debt_short'),
     ('1700', 'tp'),
-#--  ОПУ       
+    #--  ОПУ
     ('2110', 'sales'),
     ('2200', 'profit_oper'),
     ('2330', 'exp_interest'),
     ('2300', 'profit_before_tax'),
-    ('2400', 'profit_after_tax'),    
-#--  ОДДС
+    ('2400', 'profit_after_tax'),
+    #--  ОДДС
     ('4100', 'cf_oper'),
     ('4200', 'cf_inv'),
     ('4300', 'cf_fin'),
@@ -92,4 +92,4 @@ DEFAULT_LOOKUP_DICT = dict([
     ('4124', 'paid_profit_tax'),
     ('4129', 'paid_other_costs'),
     ('4221', 'paid_fa_investment')]
-    )
+)

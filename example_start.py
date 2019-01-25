@@ -1,25 +1,28 @@
 """Download and truncate Rosstat corporate dataset."""
 
-from boo import download, build, read_dataframe
+from boo import download, build, read_dataframe, files
 
-print("Please be prepared download and build operations "
-      "can take several minutes!")
+print("Please be prepared: "
+      "download and build operations "
+      "can take long time!")
 
 year = 2012
 
-# download raw file from Rosstat
+# Download raw file from Rosstat
 try:
     download(year)
 except FileExistsError:
     print("Raw file already downloaded")
 
-# create truncated version with fewer columns and good column names
+# Select fewer columns and assign short column names
+# Will save to new file
 try:
     build(year)
 except FileExistsError:
     print("Work file already created")
 
-# read trimmed version of data as dataframe
+# Read data as dataframe
 df = read_dataframe(year)
 
 print(year, "dataset:", df.shape[0], "rows and", df.shape[1], "columns")
+print("File locations:", files(year))

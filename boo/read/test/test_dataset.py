@@ -10,7 +10,7 @@ from boo.file.download import curl
 from boo.settings import url
 
 
-#FIXME: may use raw('sample') fixture
+# FIXME: may use raw('sample') fixture
 @pytest.fixture
 def temp_file():
     # FIXME: must save file to temporary location
@@ -45,7 +45,7 @@ def nth(gen, n):
 def inn(gen, inn):
     inn = str(inn)
     for d in gen:
-        if d['inn'] == inn: 
+        if d['inn'] == inn:
             return d
 
 # FIXME: make tests

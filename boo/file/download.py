@@ -6,7 +6,8 @@ from tqdm import tqdm
 
 def curl(url: str, path: str, max_chunk=None):
     r = requests.get(url, stream=True)
-    _tqdm_curl = lambda iterable: tqdm(iterable, unit=' k')
+
+    def _tqdm_curl(iterable): return tqdm(iterable, unit=' k')
     with open(path, 'wb') as f:
         i = 0
         for chunk in _tqdm_curl(r.iter_content(chunk_size=1024)):

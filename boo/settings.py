@@ -28,25 +28,26 @@ class DataFile:
             self.folder = default_data_folder()
         else:
             if folder.exists():
-                self.folder = folder    
+                self.folder = folder
             else:
-                raise FileNotFoundError(folder)             
+                raise FileNotFoundError(folder)
 
     def raw(self, year):
-       return self.folder / self.name("rosstat", year)
+        return self.folder / self.name("rosstat", year)
 
     def processed(self, year):
-       return self.folder / self.name("processed", year)
+        return self.folder / self.name("processed", year)
 
     def dtype(self, year):
-       raise NotImplementedError
+        raise NotImplementedError
 
-    @staticmethod    
-    def name(tag:str, year:str):            
+    @staticmethod
+    def name(tag: str, year: str):
         return f"{tag}-{year}.csv"
 
 
 SAMPLE_TAG = "sample"
+
 
 def is_valid(year):
     return year in [SAMPLE_TAG] + list(range(YEAR_0, YEAR_LAST + 1))

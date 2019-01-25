@@ -9,7 +9,9 @@ from boo.account.variables import DEFAULT_LOOKUP_DICT
 from boo.settings import is_valid, url, DataFile
 from boo.read.dtypes import dtypes
 
-# must delete 
+# must delete
+
+
 def cannot_overwrite(path):
     if os.path.exists(path):
         raise FileExistsError("File already exists: %s" % path)
@@ -22,12 +24,12 @@ def validate(year):
 
 def args(year, data_folder=None):
     validate(year)
-    location = DataFile(data_folder)    
+    location = DataFile(data_folder)
     return url(year), location.raw(year), location.processed(year)
 
 
 def print_year(func):
-    def wrapper(year, *arg, **kwarg):        
+    def wrapper(year, *arg, **kwarg):
         print("Year:", year)
         return func(year, *arg, **kwarg)
     return wrapper
@@ -65,7 +67,7 @@ def read_dataframe(year, lookup_dict=DEFAULT_LOOKUP_DICT):
 
 def files(year):
     _, raw_path, processed_path = args(year)
-    return  raw_path, processed_path  
+    return raw_path, processed_path
 
 
 def _dataframe(path, dtypes):
