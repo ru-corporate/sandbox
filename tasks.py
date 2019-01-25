@@ -100,13 +100,23 @@ def ls(ctx):
     run(ctx, "dir /b")
 
 
+@task
+def docs(ctx, subcommand):
+    if subcommand == 'apidoc':
+        run (ctx, "sphinx-apidoc -fM -o docs/source boo */test*")    
+    if subcommand == 'make':
+        run (ctx, "docs\make.bat html")
+    if subcommand == 'show':
+        run (ctx, 'start docs/build/html/index.html')
+
+
 def quote(s):
     QUOTECHAR = '"'  # this is <">
     return f"{QUOTECHAR}{s}{QUOTECHAR}"
 
 
 ns = Collection()
-for t in [ls, clean, pep8]:
+for t in [ls, clean, pep8, docs]:
     ns.add_task(t)
 
 

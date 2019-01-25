@@ -10,6 +10,8 @@ Welcome to Russian corporate reports's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   boo
+
 
 
 Indices and tables
