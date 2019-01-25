@@ -18,7 +18,6 @@ Original Windows workaround for invoke:
     https://github.com/pyinvoke/invoke/issues/371#issuecomment-259711426
 
 """
-import sys
 import os
 import shutil
 
@@ -45,35 +44,42 @@ def remove_folder(folder, exclude=[".git", ".nojekyll"]):
             remove(fullpath)
 
 
-def walk_files(directory: Path):
+def all_dirs(directory: Path=Path(".")):
+    return list(Path(x[0]) for x in os.walk(str(directory)))
+
+
+def all_files(directory: Path=Path(".")):
     for _insider in directory.iterdir():
         if _insider.is_dir():
-            subs = walk_files(_insider.resolve())
+            subs = all_files(_insider.resolve())
             for _sub in subs:
                 yield _sub.resolve()
         else:
             yield _insider.resolve()
 
 
-def yield_python_files(folder):
-    for file in filter(lambda x: x.suffix == ".py", walk_files(folder)):
-        yield file
+def mask_by_suffix(ext, gen):
+    return filter(lambda x: x.suffix == ext, gen)
+
+def mask_by_name(name, gen):
+    return filter(lambda x: x.stem == name, gen)    
 
 
 @task
 def pep8(ctx, folder=''):
-    #path = PROJECT_DIR / 'src' / folder
-    for f in yield_python_files(Path(".")):
+    for f in mask_by_suffix(".py", all_files()):
         print("Formatting", f)
-        # FIXME: may use 'import autopep8' without console
         ctx.run("autopep8 --aggressive --aggressive --in-place {}".format(f))
 
-#epo@EP_Win8:/mnt/c/Users/Евгений/Documents/GitHub/sandbox$ find . -name \*.pyc -delete
-#epo@EP_Win8:/mnt/c/Users/Евгений/Documents/GitHub/sandbox$ find . -name __pycache__ -delete
 @task
 def clean(ctx):
-    """Wipe html documentation (not implemented)"""
-    remove_folder("gh-pages")
+    # find . -name \*.pyc -delete
+    for file in mask_by_suffix(".pyc", all_files()):
+        file.unlink()
+    # find . -name __pycache__ -delete    
+    for d in mask_by_name("__pycache__", all_dirs()):        
+        shutil.rmtree(d)
+        print("Deleted", d)
 
 
 def run(ctx, cmd):

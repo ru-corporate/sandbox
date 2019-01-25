@@ -1,6 +1,6 @@
-"""Create column names."""
+"""Create column names based on *lookup_dict*."""
 
-from boo.settings import TTL_COLUMNS, RENAME_TEXT
+from boo.account.variables import TTL_COLUMNS, RENAME_TEXT
 
 
 def split(text: str):
@@ -24,12 +24,10 @@ class Colname:
         return self.prefix + self.postfix
 
 
-def make_replacer(lookup_dict):
-    def replacer(colname):
-        v = colname.prefix
-        colname.prefix = lookup_dict.get(v, v)
-        return colname
-    return replacer
+def replace(lookup_dict, colname):
+    v = colname.prefix
+    colname.prefix = lookup_dict.get(v, v)
+    return colname
 
 
 def str_keys(d):
@@ -38,7 +36,7 @@ def str_keys(d):
 
 def change_by_dict(columns, lookup_dict):
     lookup_dict = str_keys(lookup_dict)
-    rep = make_replacer(lookup_dict)
+    rep = lambda colname: replace(lookup_dict, colname)
     return [rep(c) for c in columns]
 
 
@@ -63,18 +61,21 @@ class Colnames:
         return [str(x) for x in self.colnames]
 
 
-def base_columns():
+def _base_columns():
     return Colnames(TTL_COLUMNS).rename(RENAME_TEXT)
 
 # below are public functions
 
+def base_columns():
+    return base_columns().as_strings()
+
 
 def long_colnames(lookup_dict):
-    return base_columns().rename(lookup_dict).as_strings()
+    return _base_columns().rename(lookup_dict).as_strings()
 
 
 def data_colnames(lookup_dict):
-    return base_columns().rename(lookup_dict).filter(lookup_dict).as_strings()
+    return _base_columns().rename(lookup_dict).filter(lookup_dict).as_strings()
 
 
 if __name__ == '__main__':

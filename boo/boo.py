@@ -2,14 +2,14 @@ import os
 import pandas as pd
 from tqdm import tqdm
 
-from boo.read.dataset import Dataset
-from boo.read.dtypes import dtypes
-from boo.file.csv import save_rows
 from boo.file.download import curl
-from boo.rename import DEFAULT_LOOKUP_DICT
+from boo.file.csv import save_rows
+from boo.read.dataset import Dataset
+from boo.account.variables import DEFAULT_LOOKUP_DICT
 from boo.settings import is_valid, url, DataFile
+from boo.read.dtypes import dtypes
 
-
+# must delete 
 def cannot_overwrite(path):
     if os.path.exists(path):
         raise FileExistsError("File already exists: %s" % path)
@@ -61,6 +61,11 @@ def read_dataframe(year, lookup_dict=DEFAULT_LOOKUP_DICT):
     _, _, processed_path = args(year)
     print("Reading processed CSV file", processed_path)
     return _dataframe(processed_path, dtypes=dtypes(lookup_dict))
+
+
+def files(year):
+    _, raw_path, processed_path = args(year)
+    return  raw_path, processed_path  
 
 
 def _dataframe(path, dtypes):

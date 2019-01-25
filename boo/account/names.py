@@ -1,4 +1,8 @@
-# http://www.consultant.ru/document/cons_doc_LAW_103394/c8c663513ad32e5a0eb8ca96753ea3e0911415db/
+"""Account text descriptions
+
+Based on:
+http://www.consultant.ru/document/cons_doc_LAW_103394/c8c663513ad32e5a0eb8ca96753ea3e0911415db/
+"""
 
 ACCOUNT_NAMES_TEXT = """БУХГАЛТЕРСКИЙ БАЛАНС	1000
 Итого внеоборотных активов	1100
@@ -135,7 +139,7 @@ SECTION_NAMES_TEXT = """БУХГАЛТЕРСКИЙ БАЛАНС	1
 ПОЯСНЕНИЯ К БУХГАЛТЕРСКОМУ БАЛАНСУ И ОТЧЕТУ О ФИНАНСОВЫХ РЕЗУЛЬТАТАХ	5
 ОТЧЕТ О ЦЕЛЕВОМ ИСПОЛЬЗОВАНИИ СРЕДСТВ	6"""
 
-def items(doc: str):
+def _items(doc: str):
     for x in doc.split('\n'):
         y = x.split('\t')
         try:
@@ -143,15 +147,19 @@ def items(doc: str):
         except IndexError:    
             raise ValueError(y)
 
-ACCOUNT_NAMES = {b:a for (a, b) in items(ACCOUNT_NAMES_TEXT)}
-SECTION_NAMES = {b:a for (a, b) in items(SECTION_NAMES_TEXT)}
+ACCOUNT_NAMES = {b:a for (a, b) in _items(ACCOUNT_NAMES_TEXT)}
+SECTION_NAMES = {b:a for (a, b) in _items(SECTION_NAMES_TEXT)}
 
-def account_name(code):
+def account_name(code: str):
+    """Return account text description by code."""
     return ACCOUNT_NAMES.get(str(code))
-    
+
 def account_section(code):
+    """Return account section description by code."""
     return SECTION_NAMES.get(str(code)[0])
-    
+
+def account_parent(code):    
+    raise NotImplementedError
     
     
 
