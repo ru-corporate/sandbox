@@ -10,6 +10,7 @@ from boo.settings import is_valid, url, DataFile
 from boo.read.dtypes import dtypes
 
 
+
 def cannot_overwrite(path):
     if os.path.exists(path):
         raise FileExistsError("File already exists: %s" % path)
