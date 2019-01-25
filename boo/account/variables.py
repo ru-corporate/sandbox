@@ -59,9 +59,15 @@ RENAME_TEXT = {'Наименование': 'name',
                'Тип отчета': 'report_type',
                'Дата актуализации': 'date_published'}
 
+PARSED_FIELDS = [
+    ('org', 'str', 'Тип юридического лица (часть наименования организации)'),
+    ('title', 'str', 'Собственное название (часть наименования организации)'),
+    ('ok1, ok2, ok3', 'int', 'Коды ОКВЭД первого, второго и третьего уровня'),
+    ('region', 'int', 'Код региона (по ИНН)')
+]
 
-DEFAULT_LOOKUP_DICT = dict([
-    #--  Баланс
+#--  Баланс
+balance = [
     ('1150', 'of'),
     ('1100', 'ta_fix'),
     ('1200', 'ta_nonfix'),
@@ -72,24 +78,47 @@ DEFAULT_LOOKUP_DICT = dict([
     ('1410', 'debt_long'),
     ('1500', 'tp_short'),
     ('1510', 'debt_short'),
-    ('1700', 'tp'),
-    #--  ОПУ
+    ('1700', 'tp')
+]
+
+#--  ОПУ
+opu = [
     ('2110', 'sales'),
     ('2200', 'profit_oper'),
     ('2330', 'exp_interest'),
     ('2300', 'profit_before_tax'),
-    ('2400', 'profit_after_tax'),
-    #--  ОДДС
-    ('4100', 'cf_oper'),
-    ('4200', 'cf_inv'),
-    ('4300', 'cf_fin'),
-    ('4400', 'cf'),
-    ('4110', 'cash_in_oper_total'),
-    ('4111', 'cash_in_oper_sales'),
+    ('2400', 'profit_after_tax')
+]    
+
+#--  ОДДС
+cf_oper = [
+    # -- Операционная деятельность
+    ('4100', 'cfo'),
+    ('4110', 'cfo_in'),
+    ('4111', 'cfo_in_sales'),
+    ('4120', 'cfo_out'),
     ('4121', 'paid_to_supplier'),
     ('4122', 'paid_to_worker'),
     ('4123', 'paid_interest'),
     ('4124', 'paid_profit_tax'),
     ('4129', 'paid_other_costs'),
-    ('4221', 'paid_fa_investment')]
-)
+]
+
+cf_inv = [
+    # -- Инвестицонная деятельность
+    ('4200', 'cfi'),
+    ('4210', 'cfi_in'),
+    ('4210', 'cfi_out'),
+    ('4221', 'paid_fa_investment')
+]
+
+cf_fin = [
+    # -- Финансовая деятельность
+    ('4300', 'cff'),
+    ('4310', 'cff_in'),
+    ('4320', 'cff_out'),
+    ('4400', 'cf'),
+]
+
+
+DEFAULT_LOOKUP_DICT = dict(balance + opu + cf_oper + cf_inv + cf_fin)
