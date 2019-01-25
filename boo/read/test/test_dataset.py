@@ -24,7 +24,7 @@ def test_inn(temp_file):
     d = Dataset(temp_file, DEFAULT_LOOKUP_DICT)
     # the inn number is close to start of file
     x = inn(d.dicts(), 2457009983)
-    bool1 = x['cfo'] + x['cfi'] + x['cff'] == x['cf']
+    bool1 = x['cf_oper'] + x['cf_inv'] + x['cf_fin'] == x['cf']
     bool2 = x['tp_capital'] + x['tp_long'] + x['tp_short'] == x['tp']
     bool3 = x['ta_nonfix'] + x['ta_fix'] == x['ta']
     assert all([bool1, bool2, bool3])

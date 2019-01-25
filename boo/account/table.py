@@ -16,7 +16,7 @@ MIDROW = [":------------:", ":--------:", ":---------------------:"]
 
 
 def table(gen):
-    return newlined([HEADER]+[MIDROW]+row_items(opu))
+    return newlined([HEADER]+[MIDROW]+row_items(gen))
 
 
 if __name__ == '__main__':    
