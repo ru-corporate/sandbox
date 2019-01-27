@@ -1,14 +1,15 @@
-#
 # Goal:
-#    make dataset for large companies     
+#    make canonical dataset for further reuse     
 #
 # Solution:
-#    as below    
+#    import pick
+#    pick.make_df()
 #
 # Risks: 
+#    truncates too many companies
 #    some functions may change state of global variable
-#    import boo needs tweaks
-#    looks unstable with yupiter notebook
+#    import boo needs tweaks if boo not installed lacally 
+#    looks unstable with jupyter notebook
 
 from boo.read import row
 from boo import read_dataframe
@@ -27,9 +28,13 @@ SHORT_NAMES_BY_INN = {
     '7706664260': "Атомэнергопром"
 }
 
+def make_df():
+    return base_report(read_dataframe(2017).set_index('inn'))
+
 
 def base_report(df):
-    return df[COLUMNS_NONRUB+COLUMNS_RUB][is_operational(df)]
+    _df = df[COLUMNS_NONRUB+COLUMNS_RUB][is_operational(df)]
+    return rename(dequote(to_bln(_df)))
         
 
 def divide(df, m=1):
@@ -88,26 +93,40 @@ def rename(df, rename_dict=SHORT_NAMES_BY_INN):
     df.loc[ix,['title']] = df.loc[ix].index.map(lambda inn: rename_dict[inn])
     return df
 
+
 def industry(df, ok1):
    return df[df.ok1==ok1]
 
+
 def industry2(df, ok1, ok2):
    return df[(df.ok1==ok1) & (df.ok2==ok2)]
+
+
+def sales_df(df):
+    return sort_sales(df)[SMALL_SHOW]
+
+def ta_df(df):
+    return sort_sales(df)[SMALL_SHOW]
+
 
 if __name__ == "__main__":
     try:
         df
     except NameError:
         df = read_dataframe(2017).set_index('inn') 
-    base_df = rename(dequote(to_bln(df[COLUMNS_NONRUB+COLUMNS_RUB][is_operational(df)])))    
+    base_df = base_report(df) #rename(dequote(to_bln(df[COLUMNS_NONRUB+COLUMNS_RUB][is_operational(df)])))    
     sf = sort_sales(base_df)[SMALL_SHOW]
     af = sort_ta(base_df)[SMALL_SHOW]
     n = 5
-    #print("\nКрупнейшие компании по выручке:")
-    #print(sf.head(n))
-    #print("\nКрупнейшие компании по активам:")
-    # 1. Напечатать в файл:
-    #print(af.head(n))
+    print("\nКрупнейшие компании по выручке:")
+    print(.head(n))
+    print("\nКрупнейшие компании по активам:")
+    print(af.head(n))
+
+    # - не вычищены финановые компании, у которых большая "выручка"
+    # -  
+ 
+# 1. Напечатать в файл:
 #    for i in OKVEDv2.keys():
 #        print()
 #        print(i, OKVEDv2[i])
@@ -148,11 +167,5 @@ if __name__ == "__main__":
     # https://expert.ru/dossier/rating/expert-400/
     # http://www.forbes.ru/rating/367067-200-krupneyshih-rossiyskih-chastnyh-kompaniy-2018-reyting-forbes
     # https://www.rbc.ru/rbc500/
-    
-     
-    
-    
-    
-    
-            
-    
+
+
