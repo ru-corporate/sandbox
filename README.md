@@ -39,8 +39,7 @@ pip install -r requirements.txt
 
 ### Демонстрационный пример
 
-Вы можете начать работу с коротким образцом данных
-с условным названием `sample`:
+Вы можете начать работу с коротким образцом данных:
 
 ```python
 from boo import download, build, read_dataframe
