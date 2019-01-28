@@ -38,9 +38,9 @@ def print_year(func):
 def download(year):
     url, raw_path, _ = args(year)
     cannot_overwrite(raw_path)
-    print("Downloading from", url)
+    print("Downloading", url)
     curl(url, raw_path)
-    print("Saved at", raw_path)
+    print("Saved as", raw_path)
     return raw_path
 
 
