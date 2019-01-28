@@ -138,13 +138,16 @@ if __name__ == "__main__":
     assert set(df.ok1.unique()) == set(OKVEDv2.keys())    
         
     # Напечатать в файл:
-    #    for i in OKVEDv2.keys():
-    #        print()
-    #        print(i, OKVEDv2[i])
-    #        print(industry(af, i). head(10))
+    k = 20     
+    with open("sample.txt",'w') as f:
+        print(f'{k} крупнейших компаний по объему активов', file=f)
+        for i in OKVEDv2.keys():
+            print("", file=f) 
+            print(i, OKVEDv2[i], file=f)
+            print(industry(af, i).head(k).to_string(line_width=120), file=f)
 
 
-    # Создать сводный файл по отраслям
+    # 3. Создать сводный файл по отраслям
     # ================================
 
     af['n'] = 1
@@ -155,13 +158,11 @@ if __name__ == "__main__":
     print(industry(af, 64).head(20))
     i.to_excel("industry.xls")
 
-    # Интересные кейсы 
-    # ================
-    
-    # 
-    # 64   99 Лизинг
+    # 4. Интересные кейсы 
+    # ===================
+
     # все лизинговые компании
-    industry2(af, 64, 91).head(20)
+    print(industry2(af, 64, 91).head(20))
     
     # Призраки:
     # 3321019680                                          БРИЗ
@@ -171,3 +172,7 @@ if __name__ == "__main__":
     # 7708729065                                     ТРЕНД  
     # https://www.kommersant.ru/top-100/trend
     
+    # 5. Дополниельные данные 
+    # =======================
+    
+    # https://www.nalog.ru/opendata/7707329152-paytax/
