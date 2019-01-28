@@ -114,30 +114,50 @@ if __name__ == "__main__":
         df
     except NameError:
         df = read_dataframe(2017).set_index('inn') 
+
+    # 1. Показать крупнейшие компании по продажам и объему активов 
+    # ============================================================
+
+
     base_df = base_report(df) #rename(dequote(to_bln(df[COLUMNS_NONRUB+COLUMNS_RUB][is_operational(df)])))    
     sf = sort_sales(base_df)[SMALL_SHOW]
     af = sort_ta(base_df)[SMALL_SHOW]
     n = 5
     print("\nКрупнейшие компании по выручке:")
-    print(.head(n))
+    print(sf.head(n))
     print("\nКрупнейшие компании по активам:")
     print(af.head(n))
 
-    # - не вычищены финановые компании, у которых большая "выручка"
-    # -  
+    # - не вычищены финановые компании, у которых большая выручка
+    # - есть компании-призраки
+    # - не ясно кто сдает ОДДС, а кто нет
  
-# 1. Напечатать в файл:
-#    for i in OKVEDv2.keys():
-#        print()
-#        print(i, OKVEDv2[i])
-#        print(industry(af, i). head(10))
+    # 2. Сгруппировать по отраслям
+    # ============================
+        
+    assert set(df.ok1.unique()) == set(OKVEDv2.keys())    
+        
+    # Напечатать в файл:
+    #    for i in OKVEDv2.keys():
+    #        print()
+    #        print(i, OKVEDv2[i])
+    #        print(industry(af, i). head(10))
+
+
+    # Создать сводный файл по отраслям
+    # ================================
+
     af['n'] = 1
     i = af.groupby('ok1').sum()
     i['industry'] = i.index.map(lambda x: OKVEDv2[x])
     i['fo'] = i.sales / i.ta
     print(i.sort_values('fo', ascending=False).head(10))
     print(industry(af, 64).head(20))
-    #i.to_excel("industry.xls")
+    i.to_excel("industry.xls")
+
+    # Интересные кейсы 
+    # ================
+    
     # 
     # 64   99 Лизинг
     # все лизинговые компании
@@ -151,21 +171,3 @@ if __name__ == "__main__":
     # 7708729065                                     ТРЕНД  
     # https://www.kommersant.ru/top-100/trend
     
-    # df[(df.ta>1000 * BLN) & (df.cf == 0)]
-    
-    
-    # Берем все компании за 2017 год
-    # Цель - проанализировать крупнейшие по отраслям
-    #        по вкладу в ВВП, расходам на труд, налогам, капитализации,
-    #        характеру бизнеса (производсвтенный/торговый),
-    #        инвестициям в основной капитал,
-    #        выплатам акционерам
-    #        посмотреть концентрацию в отраслях
-    
-    # Существующие рейтинги: не более 500 компаний
-    # https://www.kommersant.ru/top-100
-    # https://expert.ru/dossier/rating/expert-400/
-    # http://www.forbes.ru/rating/367067-200-krupneyshih-rossiyskih-chastnyh-kompaniy-2018-reyting-forbes
-    # https://www.rbc.ru/rbc500/
-
-

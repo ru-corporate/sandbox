@@ -107,4 +107,5 @@
   
 ## Прочие ссылки
 
-- как писать электронные книги
+- [Как писать электронные книги](https://www.allendowney.com/blog/2018/12/27/how-to-write-a-book/)
+- <https://gist.github.com/mrtns/da998d5fde666d6da26807e1f246246e>
