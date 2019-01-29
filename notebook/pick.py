@@ -28,10 +28,22 @@ SHORT_NAMES_BY_INN = {
     '7706664260': "Атомэнергопром"
 }
 
-def make_df():
-    return base_report(read_dataframe(2017).set_index('inn'))
+
+def make_df0(year):
+    df = read_dataframe(year)
+    n_dups = inn_duplicates(df)
+    print(f"Cleared {n_dups} duplicates from dataset. All rows unique.")        
+    return df.set_index('inn')
+    
+# FIXME: very restrictive about columns
+def make_df1(year):    
+    return base_report(make_df0(year))
 
 
+def inn_duplicates(df, _keep = 'first'):
+    return df[df.duplicated('inn', keep=_keep)].sort_values('inn')[['title', 'inn']]
+
+# FIXME: to_bln() hardcoded
 def base_report(df):
     _df = df[COLUMNS_NONRUB+COLUMNS_RUB][is_operational(df)]
     return rename(dequote(to_bln(_df)))
@@ -74,8 +86,8 @@ def dequote(df):
     return df
 
 
-def by_title(df, includes):
-    mask = df.title.map(lambda s: includes.lower() in s.lower())
+def by_title(df, text):
+    mask = df.title.map(lambda s: text.lower() in s.lower())
     return df[mask]
 
 
@@ -105,6 +117,7 @@ def industry2(df, ok1, ok2):
 def sales_df(df):
     return sort_sales(df)[SMALL_SHOW]
 
+
 def ta_df(df):
     return sort_sales(df)[SMALL_SHOW]
 
@@ -118,8 +131,7 @@ if __name__ == "__main__":
     # 1. Показать крупнейшие компании по продажам и объему активов 
     # ============================================================
 
-
-    base_df = base_report(df) #rename(dequote(to_bln(df[COLUMNS_NONRUB+COLUMNS_RUB][is_operational(df)])))    
+    base_df = base_report(df) 
     sf = sort_sales(base_df)[SMALL_SHOW]
     af = sort_ta(base_df)[SMALL_SHOW]
     n = 5
@@ -134,7 +146,8 @@ if __name__ == "__main__":
  
     # 2. Сгруппировать по отраслям
     # ============================
-        
+    
+    # warnign: this will not hold true for 2012!    
     assert set(df.ok1.unique()) == set(OKVEDv2.keys())    
         
     # Напечатать в файл:
@@ -153,6 +166,7 @@ if __name__ == "__main__":
     af['n'] = 1
     i = af.groupby('ok1').sum()
     i['industry'] = i.index.map(lambda x: OKVEDv2[x])
+    # Фондоотдача 
     i['fo'] = i.sales / i.ta
     print(i.sort_values('fo', ascending=False).head(10))
     print(industry(af, 64).head(20))
@@ -172,7 +186,10 @@ if __name__ == "__main__":
     # 7708729065                                     ТРЕНД  
     # https://www.kommersant.ru/top-100/trend
     
-    # 5. Дополниельные данные 
+    # Одна компания в ликвидации
+    # 
+    
+    # 5. Дополнительные данные 
     # =======================
     
     # https://www.nalog.ru/opendata/7707329152-paytax/
