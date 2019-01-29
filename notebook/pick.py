@@ -176,3 +176,5 @@ if __name__ == "__main__":
     # =======================
     
     # https://www.nalog.ru/opendata/7707329152-paytax/
+    # https://www.rbc.ru/economics/01/08/2018/5b5f03359a7947d8452f7816
+    # http://economy.gov.ru/minec/about/structure/depsectoreconom/2015020801
