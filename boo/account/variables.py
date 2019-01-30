@@ -91,6 +91,8 @@ opu = [
 ]    
 
 #--  ОДДС
+cf_total = [('4400', 'cf')]
+
 cf_oper = [
     # -- Операционная деятельность
     ('4100', 'cf_oper'),
@@ -101,7 +103,7 @@ cf_oper = [
     ('4122', 'paid_to_worker'),
     ('4123', 'paid_interest'),
     ('4124', 'paid_profit_tax'),
-    ('4129', 'paid_other_costs'),
+    ('4129', 'paid_other_costs')
 ]
 
 cf_inv = [
@@ -116,8 +118,7 @@ cf_fin = [
     # -- Финансовая деятельность
     ('4300', 'cf_fin'),
     ('4310', 'cf_fin_in'),
-    ('4320', 'cf_fin_out'),
-    ('4400', 'cf'),
+    ('4320', 'cf_fin_out')
 ]
 
 

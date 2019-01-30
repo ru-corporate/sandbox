@@ -1,9 +1,10 @@
 from boo.account.names import account_name
-from boo.account.variables import balance, opu, cf_oper, cf_inv, cf_fin 
+from boo.account.variables import balance, opu, cf_total, \
+                                  cf_oper, cf_inv, cf_fin 
 
 
 HEADER = ["Код отчетности", "Переменная", "Наименование показателя"]
-MIDROW = [":------------:", ":--------:", ":---------------------:"]
+MIDROW = [":------------:", ":--------:", ":----------------------"]
 
 
 def row_items(pairs):
@@ -28,11 +29,14 @@ def table(gen, text, level):
 # WONTFIX: | 4400 | cf | Сальдо денежных потоков за отчетный период |
 # Это в последнем разделе, но на само мделе, сальдо по трем предыдущим
 
-if __name__ == '__main__':    
-    print(table(balance, "Баланс", 3))
-    print(table(opu, "Отчет о финансовых результатах", 3))    
-    print(header("Отчет о движении денежных средств", 3))
-    print(table(cf_oper, "Операционная деятельность", 4))
-    print(table(cf_inv, "Инвестицонная деятельность", 4))
-    print(table(cf_fin, "Финансовая деятельность", 4))
+if __name__ == '__main__':
+    sections = [    
+        (balance, "Баланс", 3),
+        (opu, "Отчет о финансовых результатах", 3),
+        (cf_total, "Отчет о движении денежных средств", 3),
+        (cf_oper, "Операционная деятельность", 4),
+        (cf_inv, "Инвестицонная деятельность", 4),
+        (cf_fin, "Финансовая деятельность", 4)]
+    for s in sections:    
+        print(table(*s))
     
