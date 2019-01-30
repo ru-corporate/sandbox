@@ -87,7 +87,7 @@ def dequote(df):
 
 
 def by_title(df, text):
-    mask = df.title.map(lambda s: text.lower() in s.lower())
+    mask = df.title.map(lambda s: text.lower() in str(s).lower())
     return df[mask]
 
 
@@ -192,6 +192,12 @@ if __name__ == "__main__":
     # 5. Дополнительные данные 
     # =======================
     
+    # Налоги
     # https://www.nalog.ru/opendata/7707329152-paytax/
     # https://www.rbc.ru/economics/01/08/2018/5b5f03359a7947d8452f7816
+    # Крупнейшие компании
     # http://economy.gov.ru/minec/about/structure/depsectoreconom/2015020801
+
+
+    # 6. Ликвидационные комиссии
+    likv_df = sort(by_title(df, "ликвидационная"), "ta")[["title", "ta"]].head(10)
