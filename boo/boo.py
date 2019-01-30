@@ -10,7 +10,6 @@ from boo.settings import is_valid, url, DataFile
 from boo.read.dtypes import dtypes
 
 
-
 def cannot_overwrite(path):
     if os.path.exists(path):
         raise FileExistsError("File already exists: %s" % path)
@@ -23,12 +22,12 @@ def validate(year):
 
 def args(year, data_folder=None):
     validate(year)
-    location = DataFile(data_folder)    
+    location = DataFile(data_folder)
     return url(year), location.raw(year), location.processed(year)
 
 
 def print_year(func):
-    def wrapper(year, *arg, **kwarg):        
+    def wrapper(year, *arg, **kwarg):
         print("Year:", year)
         return func(year, *arg, **kwarg)
     return wrapper
@@ -47,21 +46,21 @@ def download(year):
 @print_year
 def build(year, column_rename_dict=DEFAULT_LOOKUP_DICT):
     """Преобразовать и сохранить CSV файл для года *year*
-       используя *column_rename_dict* для переименования столбцов 
+       используя *column_rename_dict* для переименования столбцов
        исходного файла.
 
        Преобразование данных:
         - Ввести новые названия столбцов, отражающие смысл переменных отчетности
         - Уменьшить размер файлов за счет удаления пустых и неиспользуемых столбцов
         - Привести все строки к одинаковым единицам измерения (тыс. руб.)
-        - Преобразовать отдельные колонки в более удобные: 
+        - Преобразовать отдельные колонки в более удобные:
             * короткое название компании
             * код ОКВЭД разбить на три уровня
         - Устранить повторы в данных (убрать дублирование по коду ИНН)
-        
+
         Возвращает:
         (str) путь к преобразованному csv файлу
-    """    
+    """
     _, raw_path, processed_path = args(year)
     cannot_overwrite(processed_path)
     d = Dataset(raw_path, column_rename_dict)
@@ -79,17 +78,17 @@ def read_dataframe(year, column_rename_dict=DEFAULT_LOOKUP_DICT):
 
     Возвращает:
         (pandas.DataFrame) - фрейм с данными за *year*
-    """    
+    """
     _, _, processed_path = args(year)
     print("Reading processed CSV file", processed_path)
-    #FIXME: dtypes() может возвращать типы по загловкам столбцов файла,
+    # FIXME: dtypes() может возвращать типы по загловкам столбцов файла,
     #       column_rename_dict=DEFAULT_LOOKUP_DICT фактически не нужен.
     return _dataframe(processed_path, dtypes=dtypes(column_rename_dict))
 
 
 def files(year):
     _, raw_path, processed_path = args(year)
-    return dict(raw=str(raw_path), processed=str(processed_path)) 
+    return dict(raw=str(raw_path), processed=str(processed_path))
 
 
 def _dataframe(path, dtypes):

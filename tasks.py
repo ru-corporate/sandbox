@@ -103,11 +103,11 @@ def ls(ctx):
 @task
 def docs(ctx, subcommand):
     if subcommand == 'apidoc':
-        run (ctx, "sphinx-apidoc -fM -o docs/source boo */test*")    
+        run(ctx, "sphinx-apidoc -fM -o docs/source boo */test*")
     if subcommand == 'make':
-        run (ctx, "docs\make.bat html")
+        run(ctx, "docs\make.bat html")
     if subcommand == 'show':
-        run (ctx, 'start docs/build/html/index.html')
+        run(ctx, 'start docs/build/html/index.html')
 
 
 def quote(s):
