@@ -121,5 +121,5 @@ cf_fin = [
     ('4320', 'cf_fin_out')
 ]
 
-
-DEFAULT_LOOKUP_DICT = dict(balance + opu + cf_oper + cf_inv + cf_fin)
+ALL_PAIRS = balance + opu + cf_total + cf_oper + cf_inv + cf_fin
+DEFAULT_LOOKUP_DICT = dict(ALL_PAIRS)
