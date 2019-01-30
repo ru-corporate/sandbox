@@ -59,6 +59,7 @@ RENAME_TEXT = {'Наименование': 'name',
                'Тип отчета': 'report_type',
                'Дата актуализации': 'date_published'}
 
+
 PARSED_FIELDS = [
     ('org', 'str', 'Тип юридического лица (часть наименования организации)'),
     ('title', 'str', 'Собственное название (часть наименования организации)'),
@@ -88,7 +89,7 @@ opu = [
     ('2330', 'exp_interest'),
     ('2300', 'profit_before_tax'),
     ('2400', 'profit_after_tax')
-]    
+]
 
 #--  ОДДС
 cf_total = [('4400', 'cf')]
@@ -121,5 +122,5 @@ cf_fin = [
     ('4320', 'cf_fin_out')
 ]
 
-
-DEFAULT_LOOKUP_DICT = dict(balance + opu + cf_oper + cf_inv + cf_fin)
+ALL_PAIRS = balance + opu + cf_total + cf_oper + cf_inv + cf_fin
+DEFAULT_LOOKUP_DICT = dict(ALL_PAIRS)

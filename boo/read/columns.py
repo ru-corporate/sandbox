@@ -25,64 +25,53 @@ class Colname:
     def __str__(self):
         return self.prefix + self.postfix
 
-
-def replace(lookup_dict, colname):
-    v = colname.prefix
-    colname.prefix = lookup_dict.get(v, v)
-    return colname
-
-
-def str_keys(d):
-    return {str(k): v for k, v in d.items()}
-
-
-def change_by_dict(columns, lookup_dict):
-    lookup_dict = str_keys(lookup_dict)
-
-    def rep(colname): return replace(lookup_dict, colname)
-    return [rep(c) for c in columns]
-
-
-def filter_by_dict(columns, lookup_dict):
-    named_values = list(lookup_dict.values())
-    return [c for c in columns if c.prefix in named_values]
+    def modify_prefix(self, lookup_dict):
+        v = self.prefix
+        self.prefix = lookup_dict.get(v, v)
+        return self
 
 
 class Colnames:
     def __init__(self, ttl_codes):
-        self.colnames = [Colname(x) for x in ttl_codes]
+        self.array = [Colname(x) for x in ttl_codes]
 
     def rename(self, lookup_dict):
-        self.colnames = change_by_dict(self.colnames, lookup_dict)
+        self.array = [x.modify_prefix(lookup_dict) for x in self.array]
         return self
 
     def filter(self, lookup_dict):
-        self.colnames = filter_by_dict(self.colnames, lookup_dict)
+        _names = list(lookup_dict.values())
+        self.array = [c for c in self.array if c.prefix in _names]
         return self
 
     def as_strings(self):
-        return [str(x) for x in self.colnames]
+        return list(map(str, self.array))
+
+# -- все буквенные переменные переименовали (делается всегда)
 
 
-def _base_columns():
-    return Colnames(TTL_COLUMNS).rename(RENAME_TEXT)
+def root():
+    return Colnames(TTL_COLUMNS).rename(lookup_dict=RENAME_TEXT)
 
 # below are public functions
 
 
 def base_columns():
-    return base_columns().as_strings()
+    return root().as_strings()
+
+# -- переименовали числовые переменные
 
 
 def long_colnames(lookup_dict):
-    return _base_columns().rename(lookup_dict).as_strings()
+    return root().rename(lookup_dict).as_strings()
+
+# -- переименовали числовые переменные и оставили только их
 
 
 def data_colnames(lookup_dict):
-    return _base_columns().rename(lookup_dict).filter(lookup_dict).as_strings()
+    return root().rename(lookup_dict).filter(lookup_dict).as_strings()
 
 
 if __name__ == '__main__':
     print(long_colnames({'1110': 'of'}))
     print(data_colnames({'1110': 'of'}))
-    print(data_colnames({1110: 'of'}))

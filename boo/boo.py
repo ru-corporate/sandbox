@@ -22,12 +22,12 @@ def validate(year):
 
 def args(year, data_folder=None):
     validate(year)
-    location = DataFile(data_folder)    
+    location = DataFile(data_folder)
     return url(year), location.raw(year), location.processed(year)
 
 
 def print_year(func):
-    def wrapper(year, *arg, **kwarg):        
+    def wrapper(year, *arg, **kwarg):
         print("Year:", year)
         return func(year, *arg, **kwarg)
     return wrapper
@@ -46,7 +46,7 @@ def download(year):
 @print_year
 def build(year, column_rename_dict=DEFAULT_LOOKUP_DICT):
     """Преобразовать и сохранить CSV файл для года *year*
-       используя *column_rename_dict* для переименования столбцов 
+       используя *column_rename_dict* для переименования столбцов
        исходного файла.
 
        Преобразование данных состоит из следующих опреаций:
@@ -73,24 +73,24 @@ def build(year, column_rename_dict=DEFAULT_LOOKUP_DICT):
     print("Saved processed CSV file as", processed_path)
     return processed_path
 
-
+    
 @print_year
 def read_dataframe(year, column_rename_dict=DEFAULT_LOOKUP_DICT):
     """Прочитать данные из преобразованного файла за год *year*.
 
     Возвращает:
         (pandas.DataFrame) - фрейм с данными за *year*
-    """    
+    """
     _, _, processed_path = args(year)
     print("Reading processed CSV file", processed_path)
-    #FIXME: dtypes() может возвращать типы по загловкам столбцов файла,
+    # FIXME: dtypes() может возвращать типы по загловкам столбцов файла,
     #       column_rename_dict=DEFAULT_LOOKUP_DICT фактически не нужен.
     return _dataframe(processed_path, dtypes=dtypes(column_rename_dict))
 
 
 def files(year):
     _, raw_path, processed_path = args(year)
-    return dict(raw=str(raw_path), processed=str(processed_path)) 
+    return dict(raw=str(raw_path), processed=str(processed_path))
 
 
 def _dataframe(path, dtypes):

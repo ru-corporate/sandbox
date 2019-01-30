@@ -34,7 +34,7 @@ class Company:
                           screen("  опер.         ", self.row.cf_oper),
                           screen("  фин.          ", self.row.cf_fin),
                           screen("  инв.          ", self.row.cf_inv),
-                        ])
+                          ])
 
     def __str__(self):
         ids = "  ".join([self.inn, self.okved])
@@ -61,8 +61,9 @@ def rnd(df):
     i = randint(0, df.shape[0])
     return df.iloc[i, :]
 
+
 if __name__ == "__main__":
-      
+
     z = Company(rnd(df[df.cf != 0]))
     print(z)
 

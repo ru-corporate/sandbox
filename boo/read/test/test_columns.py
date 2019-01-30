@@ -2,20 +2,16 @@ import numpy
 from boo.read import columns
 
 
-def test_data_colnames_on_int():
-    assert columns.data_colnames({1110: 'of'}) == ['of', 'of_lag']
-
-
 def test_data_colnames_on_string():
     assert columns.data_colnames({'1110': 'of'}) == ['of', 'of_lag']
 
 
-def test_long_colnames_on_int():
-    assert columns.long_colnames({1110: 'of'})
-
-
-def test_long_colnames_on_string():
+def test_long_colnames_on_string_runs():
     assert columns.long_colnames({'1110': 'of'})
+
+
+def test_long_colnames_on_string_has_length_266():
+    assert len(columns.long_colnames({'1110': 'of'})) == 266
 
 
 def test_Colname():
