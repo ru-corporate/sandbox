@@ -45,10 +45,26 @@ def download(year):
 
 
 @print_year
-def build(year, lookup_dict=DEFAULT_LOOKUP_DICT):
+def build(year, column_rename_dict=DEFAULT_LOOKUP_DICT):
+    """Преобразовать и сохранить CSV файл для года *year*
+       используя *column_rename_dict* для переименования столбцов 
+       исходного файла.
+
+       Преобразование данных:
+        - Ввести новые названия столбцов, отражающие смысл переменных отчетности
+        - Уменьшить размер файлов за счет удаления пустых и неиспользуемых столбцов
+        - Привести все строки к одинаковым единицам измерения (тыс. руб.)
+        - Преобразовать отдельные колонки в более удобные: 
+            * короткое название компании
+            * код ОКВЭД разбить на три уровня
+        - Устранить повторы в данных (убрать дублирование по коду ИНН)
+        
+        Возвращает:
+        (str) путь к преобразованному csv файлу
+    """    
     _, raw_path, processed_path = args(year)
     cannot_overwrite(processed_path)
-    d = Dataset(raw_path, lookup_dict)
+    d = Dataset(raw_path, column_rename_dict)
     gen = tqdm(d.rows(), unit=' lines')
     print("Reading and processing CSV file", raw_path)
     save_rows(processed_path, stream=gen, column_names=d.colnames)
@@ -58,10 +74,17 @@ def build(year, lookup_dict=DEFAULT_LOOKUP_DICT):
 
 
 @print_year
-def read_dataframe(year, lookup_dict=DEFAULT_LOOKUP_DICT):
+def read_dataframe(year, column_rename_dict=DEFAULT_LOOKUP_DICT):
+    """Прочитать данные из преобразованного файла за год *year*.
+
+    Возвращает:
+        (pandas.DataFrame) - фрейм с данными за *year*
+    """    
     _, _, processed_path = args(year)
     print("Reading processed CSV file", processed_path)
-    return _dataframe(processed_path, dtypes=dtypes(lookup_dict))
+    #FIXME: dtypes() может возвращать типы по загловкам столбцов файла,
+    #       column_rename_dict=DEFAULT_LOOKUP_DICT фактически не нужен.
+    return _dataframe(processed_path, dtypes=dtypes(column_rename_dict))
 
 
 def files(year):

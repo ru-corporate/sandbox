@@ -163,11 +163,6 @@ Index(['ok1', 'ok2', 'ok3', 'org', 'title', 'region', 'inn', 'okpo', 'okopf',
 | 4320 | cf_fin_out | Платежи - всего |
 
 
-| Left-aligned | Center-aligned | Right-aligned |
-| :---         |     :---:      |          ---: |
-| git status   | git status     | git status    |
-| git diff     | git diff       | git diff      |
-
 ## Хитрости и тонкости
 
 - Чтобы ноутбуки каталога `notebook` могли использвоать `boo.read_dataframe()`
