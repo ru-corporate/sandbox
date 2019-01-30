@@ -10,7 +10,6 @@ from boo.settings import is_valid, url, DataFile
 from boo.read.dtypes import dtypes
 
 
-
 def cannot_overwrite(path):
     if os.path.exists(path):
         raise FileExistsError("File already exists: %s" % path)
@@ -50,17 +49,20 @@ def build(year, column_rename_dict=DEFAULT_LOOKUP_DICT):
        используя *column_rename_dict* для переименования столбцов 
        исходного файла.
 
-       Преобразование данных:
+       Преобразование данных состоит из следующих опреаций:
+
         - Ввести новые названия столбцов, отражающие смысл переменных отчетности
-        - Уменьшить размер файлов за счет удаления пустых и неиспользуемых столбцов
+          (по *column_rename_dict*)
+        - Уменьшить размер файла за счет удаления столбцов с числовыми данными, 
+          не указанными в *column_rename_dict*
         - Привести все строки к одинаковым единицам измерения (тыс. руб.)
         - Преобразовать отдельные колонки в более удобные: 
-            * короткое название компании
+            * найти короткое название компании
             * код ОКВЭД разбить на три уровня
-        - Устранить повторы в данных (убрать дублирование по коду ИНН)
-        
+            * определить регион по ИНН
+
         Возвращает:
-        (str) путь к преобразованному csv файлу
+           (str) путь к преобразованному CSV файлу
     """    
     _, raw_path, processed_path = args(year)
     cannot_overwrite(processed_path)
@@ -68,7 +70,6 @@ def build(year, column_rename_dict=DEFAULT_LOOKUP_DICT):
     gen = tqdm(d.rows(), unit=' lines')
     print("Reading and processing CSV file", raw_path)
     save_rows(processed_path, stream=gen, column_names=d.colnames)
-    # TODO: записываем dtypes https://stackoverflow.com/a/50423394/1758363
     print("Saved processed CSV file as", processed_path)
     return processed_path
 
