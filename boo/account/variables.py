@@ -122,4 +122,4 @@ cf_fin = [
 ]
 
 
-DEFAULT_LOOKUP_DICT = dict(balance + opu + cf_oper + cf_inv + cf_fin)
+DEFAULT_LOOKUP_DICT = dict(balance + opu + cf_total + cf_oper + cf_inv + cf_fin)

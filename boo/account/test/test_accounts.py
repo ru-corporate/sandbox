@@ -1,4 +1,5 @@
-from boo.account.names import account_name, account_section
+from boo.account.names import account_name
+from boo.account.sections import account_section
 
 
 def test_account_name():
