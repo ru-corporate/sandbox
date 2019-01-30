@@ -1,23 +1,22 @@
 from boo.account.names import account_name
 from boo.account.variables import balance, opu, cf_total, \
-    cf_oper, cf_inv, cf_fin
+    cf_oper, cf_inv, cf_fin, PARSED_FIELDS
 
 
 HEADER = ["Код отчетности", "Переменная", "Наименование показателя"]
 MIDROW = [":------------:", ":--------:", ":----------------------"]
 
 
-def row_items(pairs):
+def unpack(pairs):
     return [(p[0], p[1], account_name(p[0])) for p in pairs]
 
 
-def add_pipes(lst):
-    row = ["|", " | ".join(lst), "|"]
-    return " ".join(row)
+def add_pipes(items):
+    return " ".join(["|", " | ".join(items), "|"])
 
 
-def table_body(gen):
-    return [add_pipes(x) for x in [HEADER] + [MIDROW] + row_items(gen)]
+def table_body(gen, th=HEADER):
+    return [add_pipes(x) for x in [th] + [MIDROW] + list(gen)]
 
 
 def header(text, level):
@@ -31,11 +30,8 @@ def newlined(gen):
 def table(gen, text, level):
     return newlined([header(text, level)] + table_body(gen))
 
-# WONTFIX: | 4400 | cf | Сальдо денежных потоков за отчетный период |
-# Это в последнем разделе, но на само мделе, сальдо по трем предыдущим
 
-
-if __name__ == '__main__':
+def table_numeric():
     sections = [
         (balance, "Баланс", 3),
         (opu, "Отчет о финансовых результатах", 3),
@@ -43,5 +39,10 @@ if __name__ == '__main__':
         (cf_oper, "Операционная деятельность", 4),
         (cf_inv, "Инвестицонная деятельность", 4),
         (cf_fin, "Финансовая деятельность", 4)]
-    for s in sections:
-        print(table(*s))
+    for pairs, header, level in sections:
+        print(table(unpack(pairs), header, level))
+        
+        
+def table_starts():
+    print(newlined(table_body(PARSED_FIELDS, 
+                     th=["Переменная", "Тип","Наименование показателя"])))       

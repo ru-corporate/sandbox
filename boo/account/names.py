@@ -161,7 +161,3 @@ def account_name(code: str):
 def account_section(code):
     """Return account section description by code."""
     return SECTION_NAMES.get(str(code)[0])
-
-
-def account_parent(code):
-    raise NotImplementedError
