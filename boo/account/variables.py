@@ -49,22 +49,16 @@ TTL_COLUMNS = ['Наименование', 'ОКПО', 'ОКОПФ', 'ОКФС',
                '63003', '64003', 'Дата актуализации']
 
 
-RENAME_TEXT = {'Наименование': 'name',
-               'ОКПО': 'okpo',
-               'ОКОПФ': 'okopf',
-               'ОКФС': 'okfs',
-               'ОКВЭД': 'okved',
-               'ИНН': 'inn',
-               'Код единицы измерения': 'unit',
-               'Тип отчета': 'report_type',
-               'Дата актуализации': 'date_published'}
+RENAME_TEXT_FIELDS = {'Наименование': 'name',
+                'ОКПО': 'okpo',
+                'ОКОПФ': 'okopf',
+                'ОКФС': 'okfs',
+                'ОКВЭД': 'okved',
+                'ИНН': 'inn',
+                'Код единицы измерения': 'unit',
+                'Тип отчета': 'report_type',
+                'Дата актуализации': 'date_published'}
 
-PARSED_FIELDS = [
-    ('org', 'str', 'Тип юридического лица (часть наименования организации)'),
-    ('title', 'str', 'Собственное название (часть наименования организации)'),
-    ('ok1, ok2, ok3', 'int', 'Коды ОКВЭД первого, второго и третьего уровня'),
-    ('region', 'int', 'Код региона (по ИНН)')
-]
 
 #--  Баланс
 balance = [
@@ -122,4 +116,63 @@ cf_fin = [
 ]
 
 
-DEFAULT_LOOKUP_DICT = dict(balance + opu + cf_total + cf_oper + cf_inv + cf_fin)
+RENAME_DATA_FIELDS = dict(balance + opu + cf_total + cf_oper + cf_inv + cf_fin)
+ 
+
+def fst(text): 
+    return text[0]
+
+
+def last(text):
+    return text[-1]
+
+
+def trim(text):
+    return text[0:-1]
+
+
+def split(text: str):
+    code = text
+    is_lagged = False
+    if fst(text) != "3" and last(text) in ["3", "4"]:
+        code = trim(text)
+        if last(text) == "4":
+            is_lagged = True
+    return dict(code=code, is_lagged=is_lagged)
+
+
+def map_dict(item, lookup_dict):
+    v = item['code']
+    if v in lookup_dict.keys():
+        item['code'] = lookup_dict[v]
+    return item
+
+def as_str(item):
+    return item['code'] + ("_lag" if item['is_lagged'] else "")
+
+def as_strings(items):
+    return list(map(as_str, items))
+
+def transform(code):
+    item = split(code)
+    item = map_dict(item, RENAME_TEXT_FIELDS)
+    item = map_dict(item, RENAME_DATA_FIELDS)
+    return item
+
+def is_data(item):
+    return item['code'] in RENAME_DATA_FIELDS.values()
+
+def is_text(item):
+    return item['code'] in RENAME_TEXT_FIELDS.values()
+
+def make_columns(root_list = TTL_COLUMNS, 
+                 text_map  = RENAME_TEXT_FIELDS,
+                 data_map  = RENAME_DATA_FIELDS):
+    items = [transform(code) for code in root_list]
+    return dict(all_columns = as_strings(items),
+                data_columns = as_strings(filter(is_data, items)),
+                text_columns = as_strings(filter(is_text, items))
+                )                                         
+                
+# public constant
+COLUMNS =  make_columns()

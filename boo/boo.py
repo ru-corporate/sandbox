@@ -3,11 +3,10 @@ import pandas as pd
 from tqdm import tqdm
 
 from boo.file.download import curl
-from boo.file.csv import save_rows
-from boo.read.dataset import Dataset
-from boo.account.variables import DEFAULT_LOOKUP_DICT
+from boo.file.csv import yield_rows, save_rows
+from boo.row import Reader
+from boo.account.variables import COLUMNS
 from boo.settings import is_valid, url, DataFile
-from boo.read.dtypes import dtypes
 
 
 def cannot_overwrite(path):
@@ -43,39 +42,49 @@ def download(year):
     return raw_path
 
 
+class Dataset:
+    def __init__(self, filepath, columns_dict):
+        self.reader = Reader(**columns_dict)
+        self.filepath = filepath
+
+    def raw_rows(self):
+        return yield_rows(self.filepath)        
+
+    def rows(self):
+        return map(self.reader.parse_row, self.raw_rows())
+
+    def dicts(self):
+        return map(self.reader.to_dict, self.raw_rows())    
+                
+       
+def colnames(columns_dict):
+    return Reader(**columns_dict).colnames
+
+
+def dtypes(columns_dict):    
+    return Reader(**columns_dict).dtypes
+
+
 @print_year
-def build(year, column_rename_dict=DEFAULT_LOOKUP_DICT):
-    """Преобразовать и сохранить CSV файл для года *year*
-       используя *column_rename_dict* для переименования столбцов
-       исходного файла.
+def build(year, columns_dict=COLUMNS):
+    """Преобразовать и сохранить CSV файл для года *year*  используя 
+       *columns_dict* для переименования столбцов.
 
-       Преобразование данных состоит из следующих опреаций:
-
-        - Ввести новые названия столбцов, отражающие смысл переменных отчетности
-          (по *column_rename_dict*)
-        - Уменьшить размер файла за счет удаления столбцов с числовыми данными, 
-          не указанными в *column_rename_dict*
-        - Привести все строки к одинаковым единицам измерения (тыс. руб.)
-        - Преобразовать отдельные колонки в более удобные: 
-            * найти короткое название компании
-            * код ОКВЭД разбить на три уровня
-            * определить регион по ИНН
-
-        Возвращает:
-           (str) путь к преобразованному CSV файлу
+     Возвращает:
+        (str) путь к преобразованному CSV файлу
     """    
     _, raw_path, processed_path = args(year)
     cannot_overwrite(processed_path)
-    d = Dataset(raw_path, column_rename_dict)
-    gen = tqdm(d.rows(), unit=' lines')
     print("Reading and processing CSV file", raw_path)
-    save_rows(processed_path, stream=gen, column_names=d.colnames)
+    _gen = Dataset(raw_path, columns_dict).rows()
+    gen = tqdm(_gen, unit=' lines')
+    save_rows(processed_path, stream=gen, column_names=colnames(columns_dict))
     print("Saved processed CSV file as", processed_path)
     return processed_path
 
     
 @print_year
-def read_dataframe(year, column_rename_dict=DEFAULT_LOOKUP_DICT):
+def read_dataframe(year, columns_dict=COLUMNS):
     """Прочитать данные из преобразованного файла за год *year*.
 
     Возвращает:
@@ -85,7 +94,7 @@ def read_dataframe(year, column_rename_dict=DEFAULT_LOOKUP_DICT):
     print("Reading processed CSV file", processed_path)
     # FIXME: dtypes() может возвращать типы по загловкам столбцов файла,
     #       column_rename_dict=DEFAULT_LOOKUP_DICT фактически не нужен.
-    return _dataframe(processed_path, dtypes=dtypes(column_rename_dict))
+    return _dataframe(processed_path, dtypes=dtypes(columns_dict))
 
 
 def files(year):

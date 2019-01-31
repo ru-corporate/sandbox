@@ -25,5 +25,3 @@ def save_rows(path,
         if column_names:
             writer.writerow(column_names)
         writer.writerows(stream)
-
-# TODO: save dtypes https://stackoverflow.com/a/50423394/1758363
