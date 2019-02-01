@@ -1,6 +1,7 @@
 from boo.account.names import account_name
 from boo.account.variables import balance, opu, cf_total, cf_oper, cf_inv, cf_fin
-
+from boo.row import make_text_keys
+from boo.views.whatis import whatis
 
 HEADER = ["Код отчетности", "Переменная", "Наименование показателя"]
 MIDROW = [":------------:", ":--------:", ":----------------------"]
@@ -11,8 +12,8 @@ def add_pipes(items):
     return " ".join(["|", " | ".join(items), "|"])
 
 
-def table_body(gen, th=HEADER):
-    return [add_pipes(x) for x in [th] + [MIDROW] + list(gen)]
+def table_body(gen, th=HEADER, midrow=MIDROW):
+    return [add_pipes(x) for x in [th] + [midrow] + list(gen)]
 
 
 def header(text, level):
@@ -27,7 +28,6 @@ def table(gen, th):
     return newlined(table_body(gen, th))
 
 
-# TODO: get account name by abbreviation
 def unpack(pairs):
     return [(p[0], p[1], account_name(p[0])) for p in pairs]
 
@@ -44,8 +44,11 @@ def table_numeric():
         print(header(text, level))
         print(table(unpack(pairs), HEADER))
         
-
-# TODO: must relate to rows.make_text_keys()        
-# def table_starts():
-#     print(newlined(table_body(PARSED_FIELDS[''], 
-#           th=["Переменная", "Тип", "Наименование показателя"])))       
+       
+def table_starts():
+     gen = [(k, whatis(k)) for k in make_text_keys()]
+     print(newlined(table_body(gen,
+                    th=["Переменная", "Наименование показателя"],
+                    midrow=[" :---: ", " :--- "])       
+                    )
+    )

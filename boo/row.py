@@ -78,6 +78,15 @@ def make_text_keys():
             'org', 'title', 'region', 'inn',
             'okpo', 'okopf', 'okfs']
 
+def new_text_field_name(varname: str):
+    okv = lambda text: f"Код ОКВЭД {text} уровня"
+    return {'ok1': okv("первого"), 
+            'ok2': okv("второго"),
+            'ok3': okv("третьего"),
+            'org': "Тип юридического лица (часть наименования организации)",
+            'title': "Короткое название организации",
+            'region': "Код региона по ИНН"}.get(varname)                            
+
 
 def make_data_values(rowd: OrderedDict, data_columns):
     # adjust values to '000 rub

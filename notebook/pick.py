@@ -11,9 +11,9 @@
 #    import boo needs tweaks if boo not installed lacally
 #    looks unstable with jupyter notebook
 
-from boo.read import row
+from boo import row
 from boo import read_dataframe
-from boo.account.okved import OKVEDv2
+from boo.classify.okved import OKVEDv2
 
 BLN = 10 ** 6  # based on thousands
 COLUMNS_NONRUB = ['title', 'ok1', 'ok2']

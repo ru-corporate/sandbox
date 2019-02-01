@@ -48,16 +48,18 @@ TTL_COLUMNS = ['Наименование', 'ОКПО', 'ОКОПФ', 'ОКФС',
                '63223', '63233', '63243', '63253', '63263', '63303', '63503',
                '63003', '64003', 'Дата актуализации']
 
-
-RENAME_TEXT_FIELDS = {'Наименование': 'name',
-                'ОКПО': 'okpo',
-                'ОКОПФ': 'okopf',
-                'ОКФС': 'okfs',
-                'ОКВЭД': 'okved',
-                'ИНН': 'inn',
-                'Код единицы измерения': 'unit',
-                'Тип отчета': 'report_type',
-                'Дата актуализации': 'date_published'}
+# -- Текстовые поля
+TEXT_FIELDS = [
+    ('Наименование', 'name'),
+    ('ОКПО', 'okpo'),
+    ('ОКОПФ', 'okopf'),
+    ('ОКФС', 'okfs'),
+    ('ОКВЭД', 'okved'),
+    ('ИНН', 'inn'),
+    ('Код единицы измерения', 'unit'),
+    ('Тип отчета', 'report_type'),
+    ('Дата актуализации', 'date_published')
+]
 
 
 #--  Баланс
@@ -115,9 +117,19 @@ cf_fin = [
     ('4320', 'cf_fin_out')
 ]
 
+def codes(map):
+    return [x[0] for x in map]
 
-RENAME_DATA_FIELDS = dict(balance + opu + cf_total + cf_oper + cf_inv + cf_fin)
- 
+
+def varnames(map):
+    return [x[1] for x in map]
+
+
+DATA_FIELDS = balance + opu + cf_total + cf_oper + cf_inv + cf_fin
+
+
+def varnames_to_code(fields=DATA_FIELDS+TEXT_FIELDS): 
+    return dict(zip(varnames(fields), codes(fields)))
 
 def fst(text): 
     return text[0]
@@ -153,26 +165,24 @@ def as_str(item):
 def as_strings(items):
     return list(map(as_str, items))
 
-def transform(code):
-    item = split(code)
-    item = map_dict(item, RENAME_TEXT_FIELDS)
-    item = map_dict(item, RENAME_DATA_FIELDS)
-    return item
+def rename_codes(map):
+    return lambda code: map_dict(code, lookup_dict=dict(map))
 
-def is_data(item):
-    return item['code'] in RENAME_DATA_FIELDS.values()
+def is_data(data_map):
+    return lambda item: item['code'] in varnames(data_map)
 
-def is_text(item):
-    return item['code'] in RENAME_TEXT_FIELDS.values()
+def is_text(text_map):
+    return lambda item: item['code'] in varnames(text_map)
 
 def make_columns(root_list = TTL_COLUMNS, 
-                 text_map  = RENAME_TEXT_FIELDS,
-                 data_map  = RENAME_DATA_FIELDS):
-    items = [transform(code) for code in root_list]
-    return dict(all_columns = as_strings(items),
-                data_columns = as_strings(filter(is_data, items)),
-                text_columns = as_strings(filter(is_text, items))
+                 text_map  = TEXT_FIELDS,
+                 data_map  = DATA_FIELDS):
+    f = rename_codes(text_map+data_map) 
+    items = [f(split(code)) for code in root_list]
+    return dict(all_columns  = as_strings(items),
+                data_columns = as_strings(filter(is_data(data_map), items)),
+                text_columns = as_strings(filter(is_text(text_map), items))
                 )                                         
                 
 # public constant
-COLUMNS =  make_columns()
+COLUMNS = make_columns()

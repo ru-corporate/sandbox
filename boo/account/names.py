@@ -133,6 +133,8 @@ ACCOUNT_NAMES_TEXT = """БУХГАЛТЕРСКИЙ БАЛАНС	1000
 Прочие	6350
 Остаток средств на конец отчетного года	6400"""
 
+
+
 def _items(doc: str):
     for x in doc.split('\n'):
         y = x.split('\t')
@@ -142,9 +144,6 @@ def _items(doc: str):
             raise ValueError(y)
 
 
-ACCOUNT_NAMES = {b: a for (a, b) in _items(ACCOUNT_NAMES_TEXT)}
-
-
 def account_name(code: str):
     """Return account text description by code."""
-    return ACCOUNT_NAMES.get(str(code))
+    return {b: a for (a, b) in _items(ACCOUNT_NAMES_TEXT)}.get(str(code))
