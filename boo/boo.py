@@ -22,11 +22,11 @@ def print_year(func):
 
 @print_year
 def download(year):
-    path, _url = raw_filepath(year), url(year), 
-    print("Downloading", url)
-    curl(path, _url)
-    print("Saved as", path)
-    return path
+    _path, _url = raw_filepath(year), url(year), 
+    print("Downloading", _url)
+    curl(_path, _url)
+    print("Saved as", _path)
+    return _path
 
 
 class Dataset:
