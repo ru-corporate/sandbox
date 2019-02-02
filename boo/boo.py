@@ -1,17 +1,10 @@
-import os
 import pandas as pd
 from tqdm import tqdm
 
-from boo.file.download import curl
-from boo.file.csv import yield_rows, save_rows
-from boo.row import Reader
 from boo.account.variables import COLUMNS
-from boo.settings import is_valid, url, DataFile
-
-
-def cannot_overwrite(path):
-    if os.path.exists(path):
-        raise FileExistsError("File already exists: %s" % path)
+from boo.file import curl, yield_rows, save_rows
+from boo.row import Reader
+from boo.settings import is_valid, url, raw_filepath, processed_filepath
 
 
 def validate(year):
@@ -19,14 +12,9 @@ def validate(year):
         raise ValueError(f"Year not supported: {year}")
 
 
-def args(year, data_folder=None):
-    validate(year)
-    location = DataFile(data_folder)
-    return url(year), location.raw(year), location.processed(year)
-
-
 def print_year(func):
     def wrapper(year, *arg, **kwarg):
+        validate(year)
         print("Year:", year)
         return func(year, *arg, **kwarg)
     return wrapper
@@ -34,12 +22,11 @@ def print_year(func):
 
 @print_year
 def download(year):
-    url, raw_path, _ = args(year)
-    cannot_overwrite(raw_path)
+    path, _url = raw_filepath(year), url(year), 
     print("Downloading", url)
-    curl(url, raw_path)
-    print("Saved as", raw_path)
-    return raw_path
+    curl(path, _url)
+    print("Saved as", path)
+    return path
 
 
 class Dataset:
@@ -55,13 +42,15 @@ class Dataset:
 
     def dicts(self):
         return map(self.reader.to_dict, self.raw_rows())    
-                
-       
-def colnames(columns_dict):
-    return Reader(**columns_dict).colnames
+
+    @property
+    def colnames(self):
+        return self.reader.colnames
 
 
-def dtypes(columns_dict):    
+# FIXME: dtypes() может возвращать типы по загловкам столбцов файла,
+#       column_rename_dict=DEFAULT_LOOKUP_DICT фактически не нужен.
+def dtypes(columns_dict=COLUMNS):    
     return Reader(**columns_dict).dtypes
 
 
@@ -73,12 +62,11 @@ def build(year, columns_dict=COLUMNS):
      Возвращает:
         (str) путь к преобразованному CSV файлу
     """    
-    _, raw_path, processed_path = args(year)
-    cannot_overwrite(processed_path)
+    raw_path, processed_path = raw_filepath(year), processed_filepath(year)
     print("Reading and processing CSV file", raw_path)
-    _gen = Dataset(raw_path, columns_dict).rows()
-    gen = tqdm(_gen, unit=' lines')
-    save_rows(processed_path, stream=gen, column_names=colnames(columns_dict))
+    d = Dataset(raw_path, columns_dict)
+    gen = tqdm(d.rows(), unit=' lines')
+    save_rows(processed_path, stream=gen, column_names=d.colnames)
     print("Saved processed CSV file as", processed_path)
     return processed_path
 
@@ -90,16 +78,9 @@ def read_dataframe(year, columns_dict=COLUMNS):
     Возвращает:
         (pandas.DataFrame) - фрейм с данными за *year*
     """
-    _, _, processed_path = args(year)
-    print("Reading processed CSV file", processed_path)
-    # FIXME: dtypes() может возвращать типы по загловкам столбцов файла,
-    #       column_rename_dict=DEFAULT_LOOKUP_DICT фактически не нужен.
-    return _dataframe(processed_path, dtypes=dtypes(columns_dict))
-
-
-def files(year):
-    _, raw_path, processed_path = args(year)
-    return dict(raw=str(raw_path), processed=str(processed_path))
+    path = processed_filepath(year)
+    print("Reading processed CSV file", path)
+    return _dataframe(path, dtypes=dtypes(columns_dict))
 
 
 def _dataframe(path, dtypes):

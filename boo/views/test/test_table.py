@@ -1,5 +1,7 @@
-from boo.views.table import table_numeric
+from boo.views.table import data_variables, registration_variables
 
 
 def test_callable():
-    table_numeric()
+    data_variables()
+    registration_variables()
+    

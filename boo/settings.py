@@ -4,23 +4,16 @@ from pathlib import Path
 YEAR_0 = 2012
 YEAR_LAST = 2017
 
-# path to data folder relative to this file
-DATA_FOLDER = "../data"
-
 
 def whereami(x=__file__):
     return Path(x).parents[0]
 
 
-def resolve_path(input_path):
-    return whereami().joinpath(input_path).resolve()
-
-
 def default_data_folder():
-    f = resolve_path(DATA_FOLDER)
-    f.mkdir(parents=True, exist_ok=True)
-    return f
-
+    home = Path.home() / ".boo"
+    home.mkdir(parents=True, exist_ok=True)
+    return home
+    
 
 class DataFile:
     def __init__(self, folder=None):
@@ -38,12 +31,18 @@ class DataFile:
     def processed(self, year):
         return self.folder / self.name("processed", year)
 
-    def dtype(self, year):
-        raise NotImplementedError
-
     @staticmethod
     def name(tag: str, year: str):
         return f"{tag}-{year}.csv"
+
+
+def raw_filepath(year):
+    return str(DataFile(None).raw(year))
+
+
+def processed_filepath(year):
+    return str(DataFile(None).processed(year))
+
 
 
 SAMPLE_TAG = "sample"

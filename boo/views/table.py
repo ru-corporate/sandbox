@@ -58,6 +58,13 @@ def registration_variables():
 class Reference:
     reported = data_variables()
     registration = registration_variables()
+    
+    def __init__(self, *arg, **kwarg):
+        pass
+    
+    def __str__(self):
+        return registration_variables() + "\n" + data_variables() 
+        
 
 # WONTFIX: may add tables between TABLE and END TABLE    
 #from mako.template import Template
