@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 #     raw_filepath(year) and processed_filepath(year)
 
 setup(name='boo',
-      version='0.2',
+      version='0.0.2',
       description='Russian corporate reports 2012-2017',
       url='http://github.com/ru-corporate/sandbox',
       author='Evgeniy Pogrebnyak',
