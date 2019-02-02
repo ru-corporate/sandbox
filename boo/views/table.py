@@ -32,23 +32,34 @@ def unpack(pairs):
     return [(p[0], p[1], account_name(p[0])) for p in pairs]
 
 
-def table_numeric():
+def data_variables(header_level=3):
     sections = [
-        (balance, "Баланс", 3),
-        (opu, "Отчет о финансовых результатах", 3),
-        (cf_total, "Отчет о движении денежных средств", 3),
-        (cf_oper, "Операционная деятельность", 4),
-        (cf_inv, "Инвестицонная деятельность", 4),
-        (cf_fin, "Финансовая деятельность", 4)]
+        (balance, "Баланс", header_level),
+        (opu, "Отчет о финансовых результатах", header_level),
+        (cf_total, "Отчет о движении денежных средств", header_level),
+        (cf_oper, "Операционная деятельность", header_level),
+        (cf_inv, "Инвестицонная деятельность", header_level),
+        (cf_fin, "Финансовая деятельность", header_level)]
+    output = []
     for pairs, text, level in sections:
-        print(header(text, level))
-        print(table(unpack(pairs), HEADER))
+        output.append(header(text, level))
+        output.append(table(unpack(pairs), HEADER))
+    return newlined(output)
         
        
-def table_starts():
+def registration_variables():
      gen = [(k, whatis(k)) for k in make_text_keys()]
-     print(newlined(table_body(gen,
+     return(newlined(table_body(gen,
                     th=["Переменная", "Наименование показателя"],
                     midrow=[" :---: ", " :--- "])       
                     )
     )
+
+class Reference:
+    reported = data_variables()
+    registration = registration_variables()
+
+# WONTFIX: may add tables between TABLE and END TABLE    
+#from mako.template import Template
+#print(Template("hello ${data}!").render(data="world"))    
+    
