@@ -8,4 +8,10 @@ setup(name='boo',
       author_email='e.pogrebnyak@gmail.com',
       license='MIT',
       packages=find_packages(),
-      zip_safe=False)
+      zip_safe=False, 
+      install_requires=[
+        "requests",
+        "pandas",
+        "tqdm"
+        ]
+      )

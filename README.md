@@ -36,10 +36,9 @@ Cкачиваем, преобразуем и анализируем годову
 Для начала работы необходимо выполнить:
 
 ```
-git clone https://github.com/ru-corporate/sandbox.git
-cd sandbox
-pip install -r requirements.txt 
+pip install git+https://github.com/ru-corporate/sandbox.git@master
 ```
+
 Пакет работает с версией Python не ниже 3.6
 
 ## Использование
