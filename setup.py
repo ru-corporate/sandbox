@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(name='boo',
       version='0.1',
@@ -8,4 +8,5 @@ setup(name='boo',
       author_email='e.pogrebnyak@gmail.com',
       license='MIT',
       packages=['boo'],
-      zip_safe=False)
+      zip_safe=False
+      packages=find_packages())
