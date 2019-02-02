@@ -104,7 +104,6 @@ print(whatis('of'))
 # File locations 
 print(raw_filepath(2017))
 print(processed_filepath(2017))
-
 ```
 
 ## Обзначения переменных
