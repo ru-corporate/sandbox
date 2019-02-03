@@ -16,7 +16,7 @@ Cкачиваем, преобразуем и анализируем годову
 
 ## Попробовать готовые данные 
 
-Поработать с готовым набором данных можно в [Google Сolaboratory](https://colab.research.google.com/drive/1BGLalP4rr5FdtXsEzb5oG4sHL5qmgbAS)
+Поработать с готовым набором данных можно в [Google Сolaboratory](https://colab.research.google.com/drive/1BGLalP4rr5FdtXsEzb5oG4sHL5qmgbAS).
 
 ## Исходные данные
 
