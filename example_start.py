@@ -1,12 +1,12 @@
 """Download and truncate Rosstat corporate dataset."""
 
-from boo import download, build, read_dataframe, files
+from boo import download, build, read_dataframe
 
 print("Please be prepared: "
       "download and build operations "
       "can take long time!")
 
-year = 2012
+year = 2017
 
 # Download raw file from Rosstat
 try:
@@ -25,4 +25,4 @@ except FileExistsError:
 df = read_dataframe(year)
 
 print(year, "dataset:", df.shape[0], "rows and", df.shape[1], "columns")
-print("File locations:", files(year))
+
